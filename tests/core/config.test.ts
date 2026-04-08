@@ -1,12 +1,16 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdirSync, rmSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 
-// Mock paths before importing config module
-const TEST_DIR = join(tmpdir(), `gh-persona-test-${Date.now()}`);
-const TEST_CONFIG_PATH = join(TEST_DIR, 'config.json');
-const TEST_KEYS_DIR = join(TEST_DIR, 'keys');
+const { TEST_DIR, TEST_CONFIG_PATH, TEST_KEYS_DIR } = vi.hoisted(() => {
+  const { join } = require('node:path');
+  const { tmpdir } = require('node:os');
+  const TEST_DIR = join(tmpdir(), `gh-persona-test-${Date.now()}`);
+  return {
+    TEST_DIR,
+    TEST_CONFIG_PATH: join(TEST_DIR, 'config.json'),
+    TEST_KEYS_DIR: join(TEST_DIR, 'keys'),
+  };
+});
 
 vi.mock('../../src/core/paths.js', () => ({
   PERSONA_DIR: TEST_DIR,
