@@ -17,11 +17,23 @@ fi
 # Remove 'v' prefix if provided
 VERSION="${VERSION#v}"
 
-echo "Preparing release v$VERSION..."
+# Check current version
+CURRENT_VERSION=$(node -p "require('./package.json').version")
+if [ "$CURRENT_VERSION" = "$VERSION" ]; then
+    echo "Error: package.json is already at version $VERSION"
+    echo "Specify a different version to release."
+    exit 1
+fi
 
-# 1. Update package.json
-echo "Updating package.json..."
-sed -i '' "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" package.json
+echo "Preparing release v$VERSION... ($CURRENT_VERSION → $VERSION)"
+
+# 1. Update package.json via node to preserve formatting
+node -e "
+const fs = require('fs');
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+pkg.version = '$VERSION';
+fs.writeFileSync('package.json', JSON.stringify(pkg, null, '\t') + '\n');
+"
 
 echo "Version updated to $VERSION in package.json."
 
@@ -34,6 +46,11 @@ npm run test:run
 
 # 3. Git commit and tag
 git add package.json
+
+if git diff --cached --quiet; then
+    echo "Error: No changes to commit. Something went wrong."
+    exit 1
+fi
 
 echo "Committing version bump..."
 git commit -m "chore: bump version to $VERSION"
