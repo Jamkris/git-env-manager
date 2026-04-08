@@ -127,7 +127,7 @@ Then register the public keys on each GitHub/GitLab account. When you run `ghem 
 ## Safety
 
 - **Atomic writes**: `~/.gitconfig` is written to a temp file first, then renamed (POSIX-atomic)
-- **Backup**: First modification to `~/.gitconfig` creates a timestamped backup in `~/.gh-persona/`
+- **Backup**: Modifying `~/.gitconfig` creates a timestamped backup in `~/.gh-persona/`
 - **Append-only**: Existing gitconfig entries (LFS, difftool, mergetool, etc.) are never removed
 - **Key permissions**: Private keys are set to `0600` on copy
 

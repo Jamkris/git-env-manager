@@ -127,7 +127,7 @@ ssh-keygen -t ed25519 -C "your-work@email.com" -f ~/.ssh/id_ed25519_work
 ## 안전 장치
 
 - **원자적 쓰기**: `~/.gitconfig`는 임시 파일에 먼저 쓴 후 rename (POSIX 원자적 연산)
-- **백업**: `~/.gitconfig` 최초 수정 시 타임스탬프가 포함된 백업 파일을 `~/.gh-persona/`에 생성
+- **백업**: `~/.gitconfig` 수정 시 타임스탬프가 포함된 백업 파일을 `~/.gh-persona/`에 생성
 - **추가 전용**: 기존 gitconfig 설정 (LFS, difftool, mergetool 등)은 절대 삭제하지 않음
 - **키 권한**: 개인키 복사 시 `0600` 권한 자동 설정
 
