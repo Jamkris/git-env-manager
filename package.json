@@ -1,11 +1,11 @@
 {
-	"name": "git-persona",
+	"name": "git-env-manager",
 	"version": "1.0.1",
 	"description": "Multi-git-profile manager with SSH key integration",
 	"type": "module",
 	"bin": {
 		"persona": "./dist/index.js",
-		"git-persona": "./dist/index.js"
+		"git-env-manager": "./dist/index.js"
 	},
 	"scripts": {
 		"build": "tsup",
@@ -25,7 +25,7 @@
 		"git",
 		"profile",
 		"ssh",
-		"persona",
+		"env-manager",
 		"multi-account"
 	],
 	"author": "Jamkris",
