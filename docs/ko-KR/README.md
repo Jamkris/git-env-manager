@@ -26,7 +26,13 @@ npm install -g git-env-manager
 ghem init
 ```
 
-`~/.git-env-manager/` 디렉토리와 초기 설정 파일이 생성됩니다.
+`~/.git-env-manager/` 디렉토리와 초기 설정 파일이 생성됩니다. 기본 언어는 영어입니다.
+
+한국어로 초기화하려면:
+
+```bash
+ghem init --lang ko
+```
 
 ### 프로필 추가
 
@@ -101,7 +107,7 @@ SSH 키는 `~/.git-env-manager/keys/{profile}/`에 복사되며 적절한 권한
 
 | 명령어 | 설명 |
 |--------|------|
-| `ghem init` | `~/.git-env-manager/` 디렉토리와 초기 설정 파일 생성 |
+| `ghem init [--lang <locale>]` | `~/.git-env-manager/` 디렉토리와 초기 설정 파일 생성 |
 | `ghem add <profile>` | 대화형 프롬프트로 새 프로필 추가 |
 | `ghem switch <profile>` | 전역 Git 프로필 및 SSH 키 전환 |
 | `ghem delete <profile>` | 프로필 및 관련 키 삭제 |
@@ -124,6 +130,26 @@ ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
 ```
 
 생성된 공개키를 GitHub/GitLab 계정에 등록한 후, `ghem add`에서 "기존 키 사용"을 선택하고 키 경로를 입력하세요.
+
+---
+
+## 언어 설정
+
+영어(`en`)와 한국어(`ko`)를 지원합니다. 기본값은 영어입니다.
+
+초기화 시 언어 설정:
+
+```bash
+ghem init --lang ko
+```
+
+이후 변경:
+
+```bash
+ghem config set-lang ko
+```
+
+모든 프롬프트, 메시지, 에러가 선택한 언어로 표시됩니다. `--help`의 명령어 설명은 영어로 유지됩니다.
 
 ---
 

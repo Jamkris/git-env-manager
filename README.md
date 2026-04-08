@@ -26,7 +26,13 @@ npm install -g git-env-manager
 ghem init
 ```
 
-This creates `~/.git-env-manager/` with an empty configuration.
+This creates `~/.git-env-manager/` with an empty configuration. Default language is English.
+
+To initialize with Korean:
+
+```bash
+ghem init --lang ko
+```
 
 ### Add a Profile
 
@@ -101,7 +107,7 @@ All configuration is stored in `~/.git-env-manager/`:
 
 | Command | Description |
 |---------|-------------|
-| `ghem init` | Create `~/.git-env-manager/` directory and initial config |
+| `ghem init [--lang <locale>]` | Create `~/.git-env-manager/` directory and initial config |
 | `ghem add <profile>` | Add a new profile via interactive prompts |
 | `ghem switch <profile>` | Switch global Git profile and SSH key |
 | `ghem delete <profile>` | Delete a profile and its associated keys |
@@ -124,6 +130,26 @@ ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
 ```
 
 Then register the public key on your GitHub/GitLab account. When you run `ghem add` and choose "Use existing key", point to your key path.
+
+---
+
+## Language
+
+git-env-manager supports English (`en`) and Korean (`ko`). Default is English.
+
+Set language during initialization:
+
+```bash
+ghem init --lang ko
+```
+
+Or change it later:
+
+```bash
+ghem config set-lang ko
+```
+
+All prompts, messages, and errors will be displayed in the selected language. Command descriptions in `--help` remain in English.
 
 ---
 
