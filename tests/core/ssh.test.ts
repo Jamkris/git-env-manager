@@ -19,6 +19,17 @@ vi.mock('../../src/core/paths.js', () => ({
   toTildePath: (path: string) => path,
 }));
 
+vi.mock('../../src/i18n/index.js', () => ({
+  setLocale: vi.fn(),
+  getLocale: () => 'en',
+  t: () => ({
+    sshKeyNotFound: (path: string) => `SSH key not found: ${path}`,
+    configNotFound: 'config.json not found. Run `ghem init` first.',
+    configInvalid: 'config.json format is invalid.',
+  }),
+  isValidLocale: (v: string) => ['en', 'ko'].includes(v),
+}));
+
 import { validateKeyExists, copyKeyPair } from '../../src/core/ssh.js';
 import { PersonaError } from '../../src/core/config.js';
 

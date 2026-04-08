@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { CONFIG_PATH } from './paths.js';
-import { MESSAGES } from '../utils/messages.js';
+import { isValidLocale, setLocale, t } from '../i18n/index.js';
+import { DEFAULT_LOCALE } from '../i18n/types.js';
+import type { Locale } from '../i18n/types.js';
 import type { PersonaConfig, Profile } from '../types/config.js';
 
 export class PersonaError extends Error {
@@ -13,9 +15,10 @@ export class PersonaError extends Error {
   }
 }
 
-function createDefaultConfig(): PersonaConfig {
+function createDefaultConfig(locale: Locale = 'en'): PersonaConfig {
   return {
     version: 1,
+    locale,
     activeProfile: null,
     profiles: [],
   };
@@ -28,7 +31,7 @@ export function configExists(): boolean {
 export function readConfig(): PersonaConfig {
   if (!existsSync(CONFIG_PATH)) {
     throw new PersonaError(
-      MESSAGES.configNotFound,
+      t().configNotFound,
       'CONFIG_NOT_FOUND',
     );
   }
@@ -40,10 +43,13 @@ export function readConfig(): PersonaConfig {
     if (parsed.version !== 1 || !Array.isArray(parsed.profiles)) {
       throw new Error();
     }
-    return parsed;
+    const locale = isValidLocale(parsed.locale) ? parsed.locale : DEFAULT_LOCALE;
+    const config = { ...parsed, locale } as PersonaConfig;
+    setLocale(config.locale);
+    return config;
   } catch {
     throw new PersonaError(
-      MESSAGES.configInvalid,
+      t().configInvalid,
       'CONFIG_INVALID',
     );
   }
@@ -53,8 +59,8 @@ export function writeConfig(config: PersonaConfig): void {
   writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2) + '\n', 'utf-8');
 }
 
-export function writeDefaultConfig(): void {
-  writeConfig(createDefaultConfig());
+export function writeDefaultConfig(locale: Locale = 'en'): void {
+  writeConfig(createDefaultConfig(locale));
 }
 
 export function getProfile(config: PersonaConfig, name: string): Profile | undefined {
@@ -65,5 +71,13 @@ export function addProfile(config: PersonaConfig, profile: Profile): PersonaConf
   return {
     ...config,
     profiles: [...config.profiles, profile],
+  };
+}
+
+export function removeProfile(config: PersonaConfig, name: string): PersonaConfig {
+  return {
+    ...config,
+    profiles: config.profiles.filter((p) => p.name !== name),
+    activeProfile: config.activeProfile === name ? null : config.activeProfile,
   };
 }

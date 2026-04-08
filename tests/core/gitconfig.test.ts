@@ -19,6 +19,16 @@ vi.mock('../../src/core/paths.js', () => ({
   toTildePath: (path: string) => path,
 }));
 
+vi.mock('../../src/i18n/index.js', () => ({
+  setLocale: vi.fn(),
+  getLocale: () => 'en',
+  t: () => ({
+    configNotFound: 'config.json not found. Run `ghem init` first.',
+    configInvalid: 'config.json format is invalid.',
+  }),
+  isValidLocale: (v: string) => ['en', 'ko'].includes(v),
+}));
+
 // Mock homedir to use test directory
 vi.mock('node:os', async (importOriginal) => {
   const original = await importOriginal<typeof import('node:os')>();
@@ -71,7 +81,7 @@ describe('gitconfig', () => {
 
       const content = readFileSync(TEST_GITCONFIG, 'utf-8');
       expect(content).toContain('[includeIf "gitdir:~/projects/"]');
-      expect(content).toContain('path = ~/.gh-persona/gitconfig-personal');
+      expect(content).toContain('path = ~/.git-env-manager/gitconfig-personal');
     });
 
     it('adds trailing slash if missing', () => {

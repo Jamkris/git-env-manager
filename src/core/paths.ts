@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 const HOME = homedir();
 
-export const PERSONA_DIR = join(HOME, '.gh-persona');
+export const PERSONA_DIR = join(HOME, '.git-env-manager');
 export const CONFIG_PATH = join(PERSONA_DIR, 'config.json');
 export const KEYS_DIR = join(PERSONA_DIR, 'keys');
 

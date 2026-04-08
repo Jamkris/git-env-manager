@@ -20,6 +20,16 @@ vi.mock('../../src/core/paths.js', () => ({
   toTildePath: (path: string) => path,
 }));
 
+vi.mock('../../src/i18n/index.js', () => ({
+  setLocale: vi.fn(),
+  getLocale: () => 'en',
+  t: () => ({
+    configNotFound: 'config.json not found. Run `ghem init` first.',
+    configInvalid: 'config.json format is invalid.',
+  }),
+  isValidLocale: (v: string) => ['en', 'ko'].includes(v),
+}));
+
 import {
   readConfig,
   writeConfig,
@@ -27,6 +37,7 @@ import {
   configExists,
   getProfile,
   addProfile,
+  removeProfile,
   PersonaError,
 } from '../../src/core/config.js';
 import type { PersonaConfig, Profile } from '../../src/types/config.js';
@@ -57,8 +68,16 @@ describe('config', () => {
       const config = readConfig();
 
       expect(config.version).toBe(1);
+      expect(config.locale).toBe('en');
       expect(config.activeProfile).toBeNull();
       expect(config.profiles).toEqual([]);
+    });
+
+    it('creates config with Korean locale', () => {
+      writeDefaultConfig('ko');
+      const config = readConfig();
+
+      expect(config.locale).toBe('ko');
     });
 
     it('writes formatted JSON with trailing newline', () => {
@@ -108,6 +127,7 @@ describe('config', () => {
     it('persists config correctly', () => {
       const config: PersonaConfig = {
         version: 1,
+        locale: 'en',
         activeProfile: 'personal',
         profiles: [
           {
@@ -132,6 +152,7 @@ describe('config', () => {
   describe('getProfile', () => {
     const config: PersonaConfig = {
       version: 1,
+      locale: 'en',
       activeProfile: null,
       profiles: [
         {
@@ -159,6 +180,7 @@ describe('config', () => {
     it('returns new config with added profile (immutable)', () => {
       const original: PersonaConfig = {
         version: 1,
+        locale: 'en',
         activeProfile: null,
         profiles: [],
       };
@@ -177,6 +199,100 @@ describe('config', () => {
       expect(updated.profiles[0].name).toBe('work');
       // Original unchanged (immutability)
       expect(original.profiles).toHaveLength(0);
+    });
+  });
+
+  describe('removeProfile', () => {
+    it('removes profile by name (immutable)', () => {
+      const config: PersonaConfig = {
+        version: 1,
+        locale: 'en',
+        activeProfile: null,
+        profiles: [
+          {
+            name: 'personal',
+            gitUserName: 'Jamkris',
+            gitUserEmail: 'test@example.com',
+            sshKeyPath: 'id_ghem_personal',
+            directories: [],
+          },
+          {
+            name: 'work',
+            gitUserName: 'leesh',
+            gitUserEmail: 'leesh@work.com',
+            sshKeyPath: 'id_ghem_work',
+            directories: [],
+          },
+        ],
+      };
+
+      const updated = removeProfile(config, 'personal');
+      expect(updated.profiles).toHaveLength(1);
+      expect(updated.profiles[0].name).toBe('work');
+      // Original unchanged
+      expect(config.profiles).toHaveLength(2);
+    });
+
+    it('nullifies activeProfile when removing active profile', () => {
+      const config: PersonaConfig = {
+        version: 1,
+        locale: 'en',
+        activeProfile: 'work',
+        profiles: [
+          {
+            name: 'work',
+            gitUserName: 'leesh',
+            gitUserEmail: 'leesh@work.com',
+            sshKeyPath: 'id_ghem_work',
+            directories: [],
+          },
+        ],
+      };
+
+      const updated = removeProfile(config, 'work');
+      expect(updated.activeProfile).toBeNull();
+      expect(updated.profiles).toHaveLength(0);
+    });
+
+    it('preserves activeProfile when removing non-active profile', () => {
+      const config: PersonaConfig = {
+        version: 1,
+        locale: 'en',
+        activeProfile: 'personal',
+        profiles: [
+          {
+            name: 'personal',
+            gitUserName: 'Jamkris',
+            gitUserEmail: 'test@example.com',
+            sshKeyPath: 'id_ghem_personal',
+            directories: [],
+          },
+          {
+            name: 'work',
+            gitUserName: 'leesh',
+            gitUserEmail: 'leesh@work.com',
+            sshKeyPath: 'id_ghem_work',
+            directories: [],
+          },
+        ],
+      };
+
+      const updated = removeProfile(config, 'work');
+      expect(updated.activeProfile).toBe('personal');
+    });
+  });
+
+  describe('backward compatibility', () => {
+    it('defaults locale to "en" when missing from config file', () => {
+      const legacy = JSON.stringify({
+        version: 1,
+        activeProfile: null,
+        profiles: [],
+      });
+      writeFileSync(TEST_CONFIG_PATH, legacy, 'utf-8');
+
+      const config = readConfig();
+      expect(config.locale).toBe('en');
     });
   });
 });

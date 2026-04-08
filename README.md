@@ -26,7 +26,7 @@ npm install -g git-env-manager
 ghem init
 ```
 
-This creates `~/.gh-persona/` with an empty configuration.
+This creates `~/.git-env-manager/` with an empty configuration.
 
 ### Add a Profile
 
@@ -37,8 +37,10 @@ ghem add personal
 Interactive prompts will ask for:
 - Git user.name
 - Git user.email
-- SSH private key path (default: `~/.ssh/id_ed25519_personal`)
+- SSH key setup: **Generate new key** (recommended) or use an existing key
 - Auto-switch directories (optional, comma-separated)
+
+When you choose "Generate new key", `ghem` automatically runs `ssh-keygen` and displays the public key so you can add it to GitHub/GitLab.
 
 ### Switch Profile (Manual)
 
@@ -66,29 +68,29 @@ When you add a profile with directories (e.g., `~/work/`), git-env-manager injec
 
 ```ini
 [includeIf "gitdir:~/work/"]
-    path = ~/.gh-persona/gitconfig-work
+    path = ~/.git-env-manager/gitconfig-work
 ```
 
 Any Git repository under `~/work/` automatically uses the work profile's name, email, and SSH key. No shell hooks, no manual switching.
 
 ### SSH Key Management
 
-SSH keys are copied to `~/.gh-persona/keys/{profile}/` with proper permissions (`0600`). Each profile's gitconfig uses `core.sshCommand` with `-o IdentitiesOnly=yes` to ensure the correct key is used.
+SSH keys are copied to `~/.git-env-manager/keys/{profile}/` with proper permissions (`0600`). Each profile's gitconfig uses `core.sshCommand` with `-o IdentitiesOnly=yes` to ensure the correct key is used.
 
 ### Configuration
 
-All configuration is stored in `~/.gh-persona/`:
+All configuration is stored in `~/.git-env-manager/`:
 
 ```text
-~/.gh-persona/
+~/.git-env-manager/
 ├── config.json              # Profile definitions
 ├── keys/
 │   ├── personal/
-│   │   ├── id_ed25519_personal
-│   │   └── id_ed25519_personal.pub
+│   │   ├── id_ghem_personal
+│   │   └── id_ghem_personal.pub
 │   └── work/
-│       ├── id_ed25519_work
-│       └── id_ed25519_work.pub
+│       ├── id_ghem_work
+│       └── id_ghem_work.pub
 ├── gitconfig-personal       # Generated per-profile gitconfig
 └── gitconfig-work
 ```
@@ -99,10 +101,13 @@ All configuration is stored in `~/.gh-persona/`:
 
 | Command | Description |
 |---------|-------------|
-| `ghem init` | Create `~/.gh-persona/` directory and initial config |
+| `ghem init` | Create `~/.git-env-manager/` directory and initial config |
 | `ghem add <profile>` | Add a new profile via interactive prompts |
 | `ghem switch <profile>` | Switch global Git profile and SSH key |
+| `ghem delete <profile>` | Delete a profile and its associated keys |
 | `ghem list` | Show all registered profiles |
+| `ghem config set-lang <locale>` | Set display language (en, ko) |
+| `ghem completion` | Output shell completion script |
 
 Both `ghem` and `git-env-manager` work as CLI commands.
 
@@ -110,24 +115,40 @@ Both `ghem` and `git-env-manager` work as CLI commands.
 
 ## SSH Key Setup
 
-Before adding a profile, generate SSH keys for each account:
+`ghem add` can **auto-generate** SSH keys for you. Just select "Generate new ed25519 key" during the interactive prompt.
+
+If you prefer to generate keys manually:
 
 ```bash
-# Personal
-ssh-keygen -t ed25519 -C "your-personal@email.com" -f ~/.ssh/id_ed25519_personal
-
-# Work
-ssh-keygen -t ed25519 -C "your-work@email.com" -f ~/.ssh/id_ed25519_work
+ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
 ```
 
-Then register the public keys on each GitHub/GitLab account. When you run `ghem add`, the tool copies the keys into its managed directory.
+Then register the public key on your GitHub/GitLab account. When you run `ghem add` and choose "Use existing key", point to your key path.
+
+---
+
+## Shell Completion
+
+### Bash
+
+```bash
+echo 'eval "$(ghem completion --shell bash)"' >> ~/.bashrc
+```
+
+### Zsh
+
+```bash
+echo 'eval "$(ghem completion --shell zsh)"' >> ~/.zshrc
+```
+
+Tab completion supports command names, profile names for `switch`/`delete`, and language options for `config set-lang`.
 
 ---
 
 ## Safety
 
 - **Atomic writes**: `~/.gitconfig` is written to a temp file first, then renamed (POSIX-atomic)
-- **Backup**: Modifying `~/.gitconfig` creates a timestamped backup in `~/.gh-persona/`
+- **Backup**: Modifying `~/.gitconfig` creates a timestamped backup in `~/.git-env-manager/`
 - **Append-only**: Existing gitconfig entries (LFS, difftool, mergetool, etc.) are never removed
 - **Key permissions**: Private keys are set to `0600` on copy
 

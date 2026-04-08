@@ -2,12 +2,13 @@ import { existsSync, copyFileSync, mkdirSync, chmodSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { KEYS_DIR, resolveHome } from './paths.js';
 import { PersonaError } from './config.js';
+import { t } from '../i18n/index.js';
 
 export function validateKeyExists(keyPath: string): void {
   const resolved = resolveHome(keyPath);
   if (!existsSync(resolved)) {
     throw new PersonaError(
-      `SSH 키를 찾을 수 없습니다: ${keyPath}`,
+      t().sshKeyNotFound(keyPath),
       'SSH_KEY_NOT_FOUND',
     );
   }
