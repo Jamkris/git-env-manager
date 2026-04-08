@@ -119,17 +119,20 @@ SSH 키는 `~/.git-env-manager/keys/{profile}/`에 복사되며 적절한 권한
 
 ---
 
-## SSH 키 생성 가이드
+## SSH 키 설정
 
-`ghem add` 명령어에서 SSH 키를 **자동 생성**할 수 있습니다. 대화형 프롬프트에서 "새 ed25519 키 생성"을 선택하세요.
+`ghem add` 실행 시 SSH 키 설정 방법을 선택합니다:
 
-수동으로 키를 생성하려면:
+1. **새 키 생성** (권장) — `~/.ssh/id_ghem_{profile}` 경로에 키 쌍을 자동 생성하고, 공개키를 표시합니다. 이를 GitHub/GitLab에 등록하세요.
+2. **기존 키 사용** — 기존 개인키 경로를 입력합니다 (예: `~/.ssh/id_rsa`).
+
+`ghem add` 실행 전에 수동으로 키를 생성하려면:
 
 ```bash
-ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
+ssh-keygen -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
 ```
 
-생성된 공개키를 GitHub/GitLab 계정에 등록한 후, `ghem add`에서 "기존 키 사용"을 선택하고 키 경로를 입력하세요.
+이후 `ghem add`에서 "기존 키 사용"을 선택하고 경로를 입력하세요.
 
 ---
 

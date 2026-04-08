@@ -121,15 +121,18 @@ Both `ghem` and `git-env-manager` work as CLI commands.
 
 ## SSH Key Setup
 
-`ghem add` can **auto-generate** SSH keys for you. Just select "Generate new ed25519 key" during the interactive prompt.
+When running `ghem add`, you'll be prompted to choose how to set up the SSH key:
 
-If you prefer to generate keys manually:
+1. **Generate new key** (recommended) — automatically creates a key pair at `~/.ssh/id_ghem_{profile}` and displays the public key for you to register on GitHub/GitLab.
+2. **Use existing key** — enter the path to an existing private key (e.g., `~/.ssh/id_rsa`).
+
+If you prefer to generate keys manually before running `ghem add`:
 
 ```bash
-ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
+ssh-keygen -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
 ```
 
-Then register the public key on your GitHub/GitLab account. When you run `ghem add` and choose "Use existing key", point to your key path.
+Then choose "Use existing key" during `ghem add` and enter the path.
 
 ---
 
