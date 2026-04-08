@@ -28,20 +28,21 @@ fi
 echo "Preparing release v$VERSION... ($CURRENT_VERSION → $VERSION)"
 
 # Update package.json via node to preserve formatting
-node -e "
-const fs = require('fs');
-const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
-pkg.version = '$VERSION';
-fs.writeFileSync('package.json', JSON.stringify(pkg, null, '\t') + '\n');
-"
+VERSION="$VERSION" node -e '
+const fs = require("node:fs");
+const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
+pkg.version = process.env.VERSION;
+fs.writeFileSync("package.json", JSON.stringify(pkg, null, "\t") + "\n");
+'
 
 # Update src/index.ts version via node (cross-platform)
-node -e "
-const fs = require('fs');
-let content = fs.readFileSync('src/index.ts', 'utf-8');
-content = content.replace(/\.version\('[^']*'\)/, \".version('$VERSION')\");
-fs.writeFileSync('src/index.ts', content);
-"
+VERSION="$VERSION" node << 'SCRIPT'
+const fs = require("node:fs");
+let content = fs.readFileSync("src/index.ts", "utf-8");
+const v = process.env.VERSION;
+content = content.replace(/\.version\('[^']*'\)/, `.version('${v}')`);
+fs.writeFileSync("src/index.ts", content);
+SCRIPT
 
 echo "Version updated to $VERSION in package.json and src/index.ts."
 
