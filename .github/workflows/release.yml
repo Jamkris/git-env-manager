@@ -87,9 +87,9 @@ jobs:
             const mergedPRs = prs.filter(pr => pr.merged_at && new Date(pr.merged_at) > since);
 
             let changelog = "## What's Changed in ${{ github.ref_name }}\n\n";
-            if (mergedPRs.length === 0) {
-              changelog += "_No pull requests merged since last release._";
-            } else {
+
+            // Section 1: Merged PRs
+            if (mergedPRs.length > 0) {
               const formatted = [];
               for (const pr of mergedPRs) {
                 let body = pr.body?.trim();
@@ -109,6 +109,49 @@ jobs:
                 formatted.push(`### ${pr.title} (#${pr.number}) by @${pr.user.login}\n\n${body}`);
               }
               changelog += formatted.join("\n\n---\n\n");
+            }
+
+            // Section 2: Direct commits not associated with any PR
+            const lastTag = "${{ steps.get_last_tag.outputs.last_tag }}";
+            const currentTag = "${{ github.ref_name }}";
+            const { data: comparison } = await github.rest.repos.compareCommitsWithBasehead({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              basehead: `${lastTag}...${currentTag}`,
+              per_page: 100
+            });
+
+            // Find commits not linked to any merged PR
+            const prCommitShas = new Set();
+            for (const pr of mergedPRs) {
+              try {
+                const { data: commits } = await github.rest.pulls.listCommits({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  per_page: 100
+                });
+                commits.forEach(c => prCommitShas.add(c.sha));
+              } catch {}
+            }
+
+            const directCommits = comparison.commits.filter(c => {
+              if (prCommitShas.has(c.sha)) return false;
+              const msg = c.commit.message;
+              // Skip merge commits and version bumps
+              if (msg.startsWith('Merge ')) return false;
+              if (msg.startsWith('chore: bump version')) return false;
+              return true;
+            });
+
+            if (directCommits.length > 0) {
+              if (mergedPRs.length > 0) changelog += "\n\n---\n\n";
+              changelog += "### Other Changes\n\n";
+              changelog += directCommits.map(c => `- ${c.commit.message.split('\n')[0]}`).join('\n');
+            }
+
+            if (mergedPRs.length === 0 && directCommits.length === 0) {
+              changelog += "_No changes since last release._";
             }
 
             const fs = require('fs');
