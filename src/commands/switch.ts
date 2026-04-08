@@ -26,10 +26,10 @@ export function registerSwitchCommand(program: Command): void {
 
         // Switch SSH key
         const keyPath = join(KEYS_DIR, profile.name, profile.sshKeyPath);
-        try {
-          spawnSync('ssh-add', ['-D'], { stdio: 'pipe' });
-          spawnSync('ssh-add', [keyPath], { stdio: 'pipe' });
-        } catch {
+        const removeResult = spawnSync('ssh-add', ['-D'], { stdio: 'pipe' });
+        const addResult = spawnSync('ssh-add', [keyPath], { stdio: 'pipe' });
+
+        if (removeResult.status !== 0 || addResult.status !== 0) {
           logger.warn(t().sshAgentFailed);
         }
 

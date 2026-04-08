@@ -32,15 +32,16 @@ vi.mock('../../src/i18n/index.js', () => ({
   getLocale: () => 'en',
   t: () => ({
     sshKeyAlreadyExists: (path: string) => `SSH key already exists at: ${path}`,
+    sshKeygenFailed: 'Failed to generate SSH key.',
     configNotFound: 'config.json not found.',
     configInvalid: 'config.json format is invalid.',
   }),
   isValidLocale: (v: string) => ['en', 'ko'].includes(v),
 }));
 
-const mockExecSync = vi.fn();
+const mockSpawnSync = vi.fn();
 vi.mock('node:child_process', () => ({
-  execSync: (...args: unknown[]) => mockExecSync(...args),
+  spawnSync: (...args: unknown[]) => mockSpawnSync(...args),
 }));
 
 import { generateSshKey } from '../../src/core/keygen.js';
@@ -50,7 +51,8 @@ describe('keygen', () => {
   beforeEach(() => {
     mkdirSync(TEST_DIR, { recursive: true });
     mkdirSync(TEST_SSH_DIR, { recursive: true });
-    mockExecSync.mockReset();
+    mockSpawnSync.mockReset();
+    mockSpawnSync.mockReturnValue({ status: 0 });
   });
 
   afterEach(() => {
@@ -59,7 +61,6 @@ describe('keygen', () => {
 
   describe('generateSshKey', () => {
     it('constructs correct key path', () => {
-      mockExecSync.mockImplementation(() => '');
       const result = generateSshKey('test@example.com', 'personal');
 
       expect(result.privatePath).toContain('.ssh/id_ghem_personal');
@@ -67,16 +68,16 @@ describe('keygen', () => {
     });
 
     it('passes correct arguments to ssh-keygen', () => {
-      mockExecSync.mockImplementation(() => '');
       generateSshKey('test@example.com', 'work');
 
-      expect(mockExecSync).toHaveBeenCalledOnce();
-      const cmd = mockExecSync.mock.calls[0][0] as string;
-      expect(cmd).toContain('ssh-keygen');
-      expect(cmd).toContain('-t ed25519');
-      expect(cmd).toContain('-C "test@example.com"');
-      expect(cmd).toContain('id_ghem_work');
-      expect(cmd).toContain('-N ""');
+      expect(mockSpawnSync).toHaveBeenCalledOnce();
+      const [cmd, args] = mockSpawnSync.mock.calls[0];
+      expect(cmd).toBe('ssh-keygen');
+      expect(args).toContain('-t');
+      expect(args).toContain('ed25519');
+      expect(args).toContain('-C');
+      expect(args).toContain('test@example.com');
+      expect(args.some((a: string) => a.includes('id_ghem_work'))).toBe(true);
     });
 
     it('throws SSH_KEY_EXISTS when key already exists', () => {
@@ -84,12 +85,14 @@ describe('keygen', () => {
       const keyPath = join(TEST_SSH_DIR, 'id_ghem_existing');
       writeFileSync(keyPath, 'fake-key', 'utf-8');
 
-      expect(() => generateSshKey('test@example.com', 'existing')).toThrow(PersonaError);
+      let caught: PersonaError | undefined;
       try {
         generateSshKey('test@example.com', 'existing');
       } catch (err) {
-        expect((err as PersonaError).code).toBe('SSH_KEY_EXISTS');
+        caught = err as PersonaError;
       }
+      expect(caught).toBeInstanceOf(PersonaError);
+      expect(caught!.code).toBe('SSH_KEY_EXISTS');
     });
 
     it('does not call ssh-keygen when key exists', () => {
@@ -103,7 +106,20 @@ describe('keygen', () => {
         // expected
       }
 
-      expect(mockExecSync).not.toHaveBeenCalled();
+      expect(mockSpawnSync).not.toHaveBeenCalled();
+    });
+
+    it('throws SSH_KEYGEN_FAILED when spawnSync returns non-zero', () => {
+      mockSpawnSync.mockReturnValue({ status: 1 });
+
+      let caught: PersonaError | undefined;
+      try {
+        generateSshKey('test@example.com', 'fail');
+      } catch (err) {
+        caught = err as PersonaError;
+      }
+      expect(caught).toBeInstanceOf(PersonaError);
+      expect(caught!.code).toBe('SSH_KEYGEN_FAILED');
     });
   });
 });

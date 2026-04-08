@@ -1,6 +1,6 @@
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join } from 'node:path';
 import { homedir } from 'node:os';
 import { PersonaError } from './config.js';
 import { t } from '../i18n/index.js';
@@ -27,10 +27,16 @@ export function generateSshKey(email: string, profileName: string): KeygenResult
     mkdirSync(sshDir, { recursive: true, mode: 0o700 });
   }
 
-  execSync(
-    `ssh-keygen -t ed25519 -C "${email}" -f "${privatePath}" -N ""`,
-    { stdio: 'pipe' },
-  );
+  const result = spawnSync('ssh-keygen', ['-t', 'ed25519', '-C', email, '-f', privatePath, '-N', ''], {
+    stdio: 'pipe',
+  });
+
+  if (result.status !== 0) {
+    throw new PersonaError(
+      t().sshKeygenFailed,
+      'SSH_KEYGEN_FAILED',
+    );
+  }
 
   return { privatePath, publicPath };
 }

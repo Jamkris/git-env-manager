@@ -55,6 +55,9 @@ export function registerAddCommand(program: Command): void {
               process.exit(1);
             }
             logger.error(t().sshKeygenFailed);
+            if (err instanceof Error) {
+              logger.error(err.message);
+            }
             process.exit(1);
           }
         } else {
