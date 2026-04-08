@@ -6,6 +6,15 @@ import { configExists, writeDefaultConfig, readConfig } from '../core/config.js'
 import { isValidLocale, setLocale, t } from '../i18n/index.js';
 import * as logger from '../utils/logger.js';
 
+function ensureDirectories(): void {
+  if (!existsSync(PERSONA_DIR)) {
+    mkdirSync(PERSONA_DIR, { recursive: true });
+  }
+  if (!existsSync(KEYS_DIR)) {
+    mkdirSync(KEYS_DIR, { recursive: true });
+  }
+}
+
 export function registerInitCommand(program: Command): void {
   program
     .command('init')
@@ -20,7 +29,6 @@ export function registerInitCommand(program: Command): void {
       const locale = opts.lang;
 
       if (configExists()) {
-        // Preserve existing locale if --lang was not explicitly provided
         const existing = readConfig();
         const effectiveLocale = program.getOptionValueSource?.('lang') === 'default'
           ? existing.locale
@@ -37,15 +45,7 @@ export function registerInitCommand(program: Command): void {
           return;
         }
 
-        // Use effective locale for the new config
-        if (!existsSync(PERSONA_DIR)) {
-          mkdirSync(PERSONA_DIR, { recursive: true });
-        }
-
-        if (!existsSync(KEYS_DIR)) {
-          mkdirSync(KEYS_DIR, { recursive: true });
-        }
-
+        ensureDirectories();
         writeDefaultConfig(effectiveLocale);
         setLocale(effectiveLocale);
         logger.success(t().initSuccess);
@@ -53,15 +53,7 @@ export function registerInitCommand(program: Command): void {
       }
 
       setLocale(locale);
-
-      if (!existsSync(PERSONA_DIR)) {
-        mkdirSync(PERSONA_DIR, { recursive: true });
-      }
-
-      if (!existsSync(KEYS_DIR)) {
-        mkdirSync(KEYS_DIR, { recursive: true });
-      }
-
+      ensureDirectories();
       writeDefaultConfig(locale);
       logger.success(t().initSuccess);
     });

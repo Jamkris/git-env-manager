@@ -38,6 +38,8 @@ export interface Messages {
   gitconfigUpdated: string;
 
   // Add command prompts
+  gitUserNamePrompt: string;
+  gitUserEmailPrompt: string;
   directoriesPrompt: string;
 
   // Switch command

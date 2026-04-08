@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { CONFIG_PATH } from './paths.js';
-import { setLocale, t } from '../i18n/index.js';
+import { isValidLocale, setLocale, t } from '../i18n/index.js';
+import { DEFAULT_LOCALE } from '../i18n/types.js';
 import type { Locale } from '../i18n/types.js';
 import type { PersonaConfig, Profile } from '../types/config.js';
 
@@ -42,7 +43,8 @@ export function readConfig(): PersonaConfig {
     if (parsed.version !== 1 || !Array.isArray(parsed.profiles)) {
       throw new Error();
     }
-    const config = { ...parsed, locale: parsed.locale ?? 'en' } as PersonaConfig;
+    const locale = isValidLocale(parsed.locale) ? parsed.locale : DEFAULT_LOCALE;
+    const config = { ...parsed, locale } as PersonaConfig;
     setLocale(config.locale);
     return config;
   } catch {

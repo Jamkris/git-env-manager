@@ -36,6 +36,8 @@ export const ko: Messages = {
   gitconfigUpdated: 'includeIf 설정이 ~/.gitconfig에 추가되었습니다.',
 
   // Add command prompts
+  gitUserNamePrompt: 'Git 사용자 이름:',
+  gitUserEmailPrompt: 'Git 이메일:',
   directoriesPrompt: '자동 전환 디렉토리 (콤마 구분, 선택사항):',
 
   // Switch command

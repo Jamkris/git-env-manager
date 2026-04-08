@@ -7,7 +7,17 @@ import { registerDeleteCommand } from './commands/delete.js';
 import { registerConfigCommand } from './commands/config.js';
 import { registerCompletionCommand } from './commands/completion.js';
 import { t } from './i18n/index.js';
+import { configExists, readConfig, PersonaError } from './core/config.js';
 import * as logger from './utils/logger.js';
+
+// Hydrate locale from config before command registration
+try {
+  if (configExists()) {
+    readConfig();
+  }
+} catch {
+  // Keep default locale if config is unreadable
+}
 
 const program = new Command();
 

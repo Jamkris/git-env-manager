@@ -23,11 +23,11 @@ export function registerAddCommand(program: Command): void {
         }
 
         const gitUserName = await input({
-          message: 'Git user.name:',
+          message: t().gitUserNamePrompt,
         });
 
         const gitUserEmail = await input({
-          message: 'Git user.email:',
+          message: t().gitUserEmailPrompt,
         });
 
         // SSH key: generate or use existing

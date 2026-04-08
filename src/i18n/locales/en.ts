@@ -36,6 +36,8 @@ export const en: Messages = {
   gitconfigUpdated: 'includeIf config added to ~/.gitconfig.',
 
   // Add command prompts
+  gitUserNamePrompt: 'Git user.name:',
+  gitUserEmailPrompt: 'Git user.email:',
   directoriesPrompt: 'Auto-switch directories (comma-separated, optional):',
 
   // Switch command

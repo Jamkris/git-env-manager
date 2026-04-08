@@ -20,7 +20,7 @@ export function t(): Messages {
 }
 
 export function isValidLocale(value: string): value is Locale {
-  return value === 'en' || value === 'ko';
+  return value in locales;
 }
 
 export type { Locale, Messages };

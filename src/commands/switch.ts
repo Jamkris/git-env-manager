@@ -1,5 +1,5 @@
 import type { Command } from 'commander';
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { readConfig, writeConfig, getProfile, PersonaError } from '../core/config.js';
 import { KEYS_DIR } from '../core/paths.js';
 import { join } from 'node:path';
@@ -21,14 +21,14 @@ export function registerSwitchCommand(program: Command): void {
         }
 
         // Set global git config
-        execSync(`git config --global user.name "${profile.gitUserName}"`, { stdio: 'pipe' });
-        execSync(`git config --global user.email "${profile.gitUserEmail}"`, { stdio: 'pipe' });
+        spawnSync('git', ['config', '--global', 'user.name', profile.gitUserName], { stdio: 'pipe' });
+        spawnSync('git', ['config', '--global', 'user.email', profile.gitUserEmail], { stdio: 'pipe' });
 
         // Switch SSH key
         const keyPath = join(KEYS_DIR, profile.name, profile.sshKeyPath);
         try {
-          execSync('ssh-add -D', { stdio: 'pipe' });
-          execSync(`ssh-add "${keyPath}"`, { stdio: 'pipe' });
+          spawnSync('ssh-add', ['-D'], { stdio: 'pipe' });
+          spawnSync('ssh-add', [keyPath], { stdio: 'pipe' });
         } catch {
           logger.warn(t().sshAgentFailed);
         }
