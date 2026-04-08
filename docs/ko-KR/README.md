@@ -37,7 +37,7 @@ ghem add personal
 대화형 프롬프트에서 다음을 입력합니다:
 - Git user.name
 - Git user.email
-- SSH 개인키 경로 (기본값: `~/.ssh/id_ed25519_personal`)
+- SSH 개인키 경로 (기본값: `~/.ssh/id_ghem_personal`)
 - 자동 전환 디렉토리 (선택, 콤마 구분)
 
 ### 프로필 수동 전환
@@ -84,11 +84,11 @@ SSH 키는 `~/.gh-persona/keys/{profile}/`에 복사되며 적절한 권한(`060
 ├── config.json              # 프로필 정의
 ├── keys/
 │   ├── personal/
-│   │   ├── id_ed25519_personal
-│   │   └── id_ed25519_personal.pub
+│   │   ├── id_ghem_personal
+│   │   └── id_ghem_personal.pub
 │   └── work/
-│       ├── id_ed25519_work
-│       └── id_ed25519_work.pub
+│       ├── id_ghem_work
+│       └── id_ghem_work.pub
 ├── gitconfig-personal       # 프로필별 gitconfig (자동 생성)
 └── gitconfig-work
 ```
@@ -114,10 +114,10 @@ SSH 키는 `~/.gh-persona/keys/{profile}/`에 복사되며 적절한 권한(`060
 
 ```bash
 # Personal 프로필용
-ssh-keygen -t ed25519 -C "your-personal@email.com" -f ~/.ssh/id_ed25519_personal
+ssh-keygen -t ed25519 -C "your-personal@email.com" -f ~/.ssh/id_ghem_personal
 
 # Work 프로필용
-ssh-keygen -t ed25519 -C "your-work@email.com" -f ~/.ssh/id_ed25519_work
+ssh-keygen -t ed25519 -C "your-work@email.com" -f ~/.ssh/id_ghem_work
 ```
 
 생성된 공개키를 각 GitHub/GitLab 계정에 등록한 후, `ghem add` 명령어를 실행하면 키가 관리 디렉토리로 복사됩니다.

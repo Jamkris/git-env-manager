@@ -37,7 +37,7 @@ ghem add personal
 Interactive prompts will ask for:
 - Git user.name
 - Git user.email
-- SSH private key path (default: `~/.ssh/id_ed25519_personal`)
+- SSH private key path (default: `~/.ssh/id_ghem_personal`)
 - Auto-switch directories (optional, comma-separated)
 
 ### Switch Profile (Manual)
@@ -84,11 +84,11 @@ All configuration is stored in `~/.gh-persona/`:
 ├── config.json              # Profile definitions
 ├── keys/
 │   ├── personal/
-│   │   ├── id_ed25519_personal
-│   │   └── id_ed25519_personal.pub
+│   │   ├── id_ghem_personal
+│   │   └── id_ghem_personal.pub
 │   └── work/
-│       ├── id_ed25519_work
-│       └── id_ed25519_work.pub
+│       ├── id_ghem_work
+│       └── id_ghem_work.pub
 ├── gitconfig-personal       # Generated per-profile gitconfig
 └── gitconfig-work
 ```
@@ -114,10 +114,10 @@ Before adding a profile, generate SSH keys for each account:
 
 ```bash
 # Personal
-ssh-keygen -t ed25519 -C "your-personal@email.com" -f ~/.ssh/id_ed25519_personal
+ssh-keygen -t ed25519 -C "your-personal@email.com" -f ~/.ssh/id_ghem_personal
 
 # Work
-ssh-keygen -t ed25519 -C "your-work@email.com" -f ~/.ssh/id_ed25519_work
+ssh-keygen -t ed25519 -C "your-work@email.com" -f ~/.ssh/id_ghem_work
 ```
 
 Then register the public keys on each GitHub/GitLab account. When you run `ghem add`, the tool copies the keys into its managed directory.

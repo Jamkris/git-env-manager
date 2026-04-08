@@ -30,7 +30,7 @@ export function registerAddCommand(program: Command): void {
 
         const sshKeySource = await input({
           message: 'SSH 개인키 경로:',
-          default: `~/.ssh/id_ed25519_${profileName}`,
+          default: `~/.ssh/id_ghem_${profileName}`,
         });
 
         const directoriesRaw = await input({
