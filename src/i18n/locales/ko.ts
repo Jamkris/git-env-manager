@@ -2,7 +2,7 @@ import type { Messages } from '../types.js';
 
 export const ko: Messages = {
   // Init
-  initSuccess: '~/.gh-persona/ 디렉토리가 생성되었습니다.',
+  initSuccess: '~/.git-env-manager/ 디렉토리가 생성되었습니다.',
   initAlreadyExists: '이미 초기화되어 있습니다. 덮어쓰시겠습니까?',
   initSkipped: '초기화를 건너뛰었습니다.',
 

@@ -26,7 +26,7 @@ npm install -g git-env-manager
 ghem init
 ```
 
-`~/.gh-persona/` 디렉토리와 초기 설정 파일이 생성됩니다.
+`~/.git-env-manager/` 디렉토리와 초기 설정 파일이 생성됩니다.
 
 ### 프로필 추가
 
@@ -66,21 +66,21 @@ ghem list
 
 ```ini
 [includeIf "gitdir:~/work/"]
-    path = ~/.gh-persona/gitconfig-work
+    path = ~/.git-env-manager/gitconfig-work
 ```
 
 `~/work/` 하위의 모든 Git 저장소에서 자동으로 해당 프로필의 이름, 이메일, SSH 키가 사용됩니다. 쉘 후킹 없이, 수동 전환 없이 동작합니다.
 
 ### SSH 키 관리
 
-SSH 키는 `~/.gh-persona/keys/{profile}/`에 복사되며 적절한 권한(`0600`)이 설정됩니다. 각 프로필의 gitconfig는 `core.sshCommand`에 `-o IdentitiesOnly=yes`를 포함하여 올바른 키만 사용되도록 보장합니다.
+SSH 키는 `~/.git-env-manager/keys/{profile}/`에 복사되며 적절한 권한(`0600`)이 설정됩니다. 각 프로필의 gitconfig는 `core.sshCommand`에 `-o IdentitiesOnly=yes`를 포함하여 올바른 키만 사용되도록 보장합니다.
 
 ### 설정 구조
 
-모든 설정은 `~/.gh-persona/`에 저장됩니다:
+모든 설정은 `~/.git-env-manager/`에 저장됩니다:
 
 ```text
-~/.gh-persona/
+~/.git-env-manager/
 ├── config.json              # 프로필 정의
 ├── keys/
 │   ├── personal/
@@ -99,7 +99,7 @@ SSH 키는 `~/.gh-persona/keys/{profile}/`에 복사되며 적절한 권한(`060
 
 | 명령어 | 설명 |
 |--------|------|
-| `ghem init` | `~/.gh-persona/` 디렉토리와 초기 설정 파일 생성 |
+| `ghem init` | `~/.git-env-manager/` 디렉토리와 초기 설정 파일 생성 |
 | `ghem add <profile>` | 대화형 프롬프트로 새 프로필 추가 |
 | `ghem switch <profile>` | 전역 Git 프로필 및 SSH 키 전환 |
 | `ghem list` | 등록된 프로필 목록 출력 |
@@ -127,7 +127,7 @@ ssh-keygen -t ed25519 -C "your-work@email.com" -f ~/.ssh/id_ghem_work
 ## 안전 장치
 
 - **원자적 쓰기**: `~/.gitconfig`는 임시 파일에 먼저 쓴 후 rename (POSIX 원자적 연산)
-- **백업**: `~/.gitconfig` 수정 시 타임스탬프가 포함된 백업 파일을 `~/.gh-persona/`에 생성
+- **백업**: `~/.gitconfig` 수정 시 타임스탬프가 포함된 백업 파일을 `~/.git-env-manager/`에 생성
 - **추가 전용**: 기존 gitconfig 설정 (LFS, difftool, mergetool 등)은 절대 삭제하지 않음
 - **키 권한**: 개인키 복사 시 `0600` 권한 자동 설정
 

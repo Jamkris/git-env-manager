@@ -9,7 +9,7 @@ import * as logger from '../utils/logger.js';
 export function registerInitCommand(program: Command): void {
   program
     .command('init')
-    .description('Create ~/.gh-persona directory and initial config')
+    .description('Create ~/.git-env-manager directory and initial config')
     .option('--lang <locale>', 'Set language (en, ko)', 'en')
     .action(async (opts: { lang: string }) => {
       if (!isValidLocale(opts.lang)) {

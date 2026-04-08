@@ -81,7 +81,7 @@ describe('gitconfig', () => {
 
       const content = readFileSync(TEST_GITCONFIG, 'utf-8');
       expect(content).toContain('[includeIf "gitdir:~/projects/"]');
-      expect(content).toContain('path = ~/.gh-persona/gitconfig-personal');
+      expect(content).toContain('path = ~/.git-env-manager/gitconfig-personal');
     });
 
     it('adds trailing slash if missing', () => {

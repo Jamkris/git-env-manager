@@ -15,7 +15,7 @@ function readGitconfig(): string {
 }
 
 function writeGitconfigAtomic(content: string): void {
-  const tmpPath = GITCONFIG_PATH + '.persona-tmp';
+  const tmpPath = GITCONFIG_PATH + '.ghem-tmp';
   writeFileSync(tmpPath, content, 'utf-8');
   renameSync(tmpPath, GITCONFIG_PATH);
 }
@@ -32,7 +32,7 @@ export function backupGitconfig(): string | null {
 }
 
 export function generateProfileGitconfig(profile: Profile): string {
-  const sshKeyTildePath = `~/.gh-persona/keys/${profile.name}/${profile.sshKeyPath}`;
+  const sshKeyTildePath = `~/.git-env-manager/keys/${profile.name}/${profile.sshKeyPath}`;
   const configPath = join(PERSONA_DIR, `gitconfig-${profile.name}`);
 
   const content = [
@@ -54,7 +54,7 @@ function ensureTrailingSlash(dir: string): string {
 
 export function addIncludeIf(directory: string, profileName: string): void {
   const content = readGitconfig();
-  const gitconfigTildePath = `~/.gh-persona/gitconfig-${profileName}`;
+  const gitconfigTildePath = `~/.git-env-manager/gitconfig-${profileName}`;
   const normalizedDir = ensureTrailingSlash(directory);
 
   // Check for duplicate
@@ -73,7 +73,7 @@ export function addIncludeIf(directory: string, profileName: string): void {
 
 export function removeIncludeIf(profileName: string): void {
   const content = readGitconfig();
-  const gitconfigTildePath = `~/.gh-persona/gitconfig-${profileName}`;
+  const gitconfigTildePath = `~/.git-env-manager/gitconfig-${profileName}`;
 
   const lines = content.split('\n');
   const filtered: string[] = [];

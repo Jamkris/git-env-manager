@@ -46,7 +46,7 @@ export function registerAddCommand(program: Command): void {
         // SSH key copy
         const keyFileName = sshKeySource.split('/').pop()!;
         copyKeyPair(sshKeySource, profileName);
-        logger.success(t().sshKeyCopied(`~/.gh-persona/keys/${profileName}/`));
+        logger.success(t().sshKeyCopied(`~/.git-env-manager/keys/${profileName}/`));
 
         // Build profile
         const profile = {

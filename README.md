@@ -26,7 +26,7 @@ npm install -g git-env-manager
 ghem init
 ```
 
-This creates `~/.gh-persona/` with an empty configuration.
+This creates `~/.git-env-manager/` with an empty configuration.
 
 ### Add a Profile
 
@@ -66,21 +66,21 @@ When you add a profile with directories (e.g., `~/work/`), git-env-manager injec
 
 ```ini
 [includeIf "gitdir:~/work/"]
-    path = ~/.gh-persona/gitconfig-work
+    path = ~/.git-env-manager/gitconfig-work
 ```
 
 Any Git repository under `~/work/` automatically uses the work profile's name, email, and SSH key. No shell hooks, no manual switching.
 
 ### SSH Key Management
 
-SSH keys are copied to `~/.gh-persona/keys/{profile}/` with proper permissions (`0600`). Each profile's gitconfig uses `core.sshCommand` with `-o IdentitiesOnly=yes` to ensure the correct key is used.
+SSH keys are copied to `~/.git-env-manager/keys/{profile}/` with proper permissions (`0600`). Each profile's gitconfig uses `core.sshCommand` with `-o IdentitiesOnly=yes` to ensure the correct key is used.
 
 ### Configuration
 
-All configuration is stored in `~/.gh-persona/`:
+All configuration is stored in `~/.git-env-manager/`:
 
 ```text
-~/.gh-persona/
+~/.git-env-manager/
 ├── config.json              # Profile definitions
 ├── keys/
 │   ├── personal/
@@ -99,7 +99,7 @@ All configuration is stored in `~/.gh-persona/`:
 
 | Command | Description |
 |---------|-------------|
-| `ghem init` | Create `~/.gh-persona/` directory and initial config |
+| `ghem init` | Create `~/.git-env-manager/` directory and initial config |
 | `ghem add <profile>` | Add a new profile via interactive prompts |
 | `ghem switch <profile>` | Switch global Git profile and SSH key |
 | `ghem list` | Show all registered profiles |
@@ -127,7 +127,7 @@ Then register the public keys on each GitHub/GitLab account. When you run `ghem 
 ## Safety
 
 - **Atomic writes**: `~/.gitconfig` is written to a temp file first, then renamed (POSIX-atomic)
-- **Backup**: Modifying `~/.gitconfig` creates a timestamped backup in `~/.gh-persona/`
+- **Backup**: Modifying `~/.gitconfig` creates a timestamped backup in `~/.git-env-manager/`
 - **Append-only**: Existing gitconfig entries (LFS, difftool, mergetool, etc.) are never removed
 - **Key permissions**: Private keys are set to `0600` on copy
 

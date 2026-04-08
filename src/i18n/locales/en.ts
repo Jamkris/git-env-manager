@@ -2,7 +2,7 @@ import type { Messages } from '../types.js';
 
 export const en: Messages = {
   // Init
-  initSuccess: '~/.gh-persona/ directory has been created.',
+  initSuccess: '~/.git-env-manager/ directory has been created.',
   initAlreadyExists: 'Already initialized. Do you want to overwrite?',
   initSkipped: 'Initialization skipped.',
 
