@@ -9,9 +9,9 @@ import { MESSAGES } from './utils/messages.js';
 const program = new Command();
 
 program
-  .name('persona')
+  .name('gem')
   .description('다중 Git 프로필 및 SSH 키 관리 도구')
-  .version('1.0.1');
+  .version('1.0.2');
 
 registerInitCommand(program);
 registerAddCommand(program);

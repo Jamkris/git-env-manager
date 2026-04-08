@@ -27,7 +27,7 @@ export function configExists(): boolean {
 export function readConfig(): PersonaConfig {
   if (!existsSync(CONFIG_PATH)) {
     throw new PersonaError(
-      'config.json을 찾을 수 없습니다. `persona init`을 먼저 실행하세요.',
+      'config.json을 찾을 수 없습니다. `gem init`을 먼저 실행하세요.',
       'CONFIG_NOT_FOUND',
     );
   }
