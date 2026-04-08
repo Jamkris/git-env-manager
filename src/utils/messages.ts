@@ -8,9 +8,9 @@ export const MESSAGES = {
   profileNotFound: (name: string) => `프로필 '${name}'을(를) 찾을 수 없습니다.`,
   profileSwitched: (name: string) => `프로필이 '${name}'(으)로 전환되었습니다.`,
   profileList: '등록된 프로필 목록:',
-  profileEmpty: '등록된 프로필이 없습니다. `gemadd <name>`으로 추가하세요.',
+  profileEmpty: '등록된 프로필이 없습니다. `gem add <name>`으로 추가하세요.',
 
-  configNotFound: 'config.json을 찾을 수 없습니다. `geminit`을 먼저 실행하세요.',
+  configNotFound: 'config.json을 찾을 수 없습니다. `gem init`을 먼저 실행하세요.',
   configInvalid: 'config.json 형식이 올바르지 않습니다.',
 
   sshKeyNotFound: (path: string) => `SSH 키를 찾을 수 없습니다: ${path}`,

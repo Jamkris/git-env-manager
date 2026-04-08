@@ -35,8 +35,13 @@ pkg.version = '$VERSION';
 fs.writeFileSync('package.json', JSON.stringify(pkg, null, '\t') + '\n');
 "
 
-# 2. Update src/index.ts version
-sed -i '' "s/.version('.*')/.version('$VERSION')/" src/index.ts
+# 2. Update src/index.ts version via node (cross-platform)
+node -e "
+const fs = require('fs');
+let content = fs.readFileSync('src/index.ts', 'utf-8');
+content = content.replace(/\.version\('[^']*'\)/, \".version('$VERSION')\");
+fs.writeFileSync('src/index.ts', content);
+"
 
 echo "Version updated to $VERSION in package.json and src/index.ts."
 
