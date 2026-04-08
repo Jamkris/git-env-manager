@@ -106,6 +106,8 @@ SSH 키는 `~/.git-env-manager/keys/{profile}/`에 복사되며 적절한 권한
 | `ghem switch <profile>` | 전역 Git 프로필 및 SSH 키 전환 |
 | `ghem delete <profile>` | 프로필 및 관련 키 삭제 |
 | `ghem list` | 등록된 프로필 목록 출력 |
+| `ghem config set-lang <locale>` | 표시 언어 설정 (en, ko) |
+| `ghem completion` | 쉘 자동완성 스크립트 출력 |
 
 `ghem`과 `git-env-manager` 두 명령어 모두 사용 가능합니다.
 
@@ -122,6 +124,24 @@ ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
 ```
 
 생성된 공개키를 GitHub/GitLab 계정에 등록한 후, `ghem add`에서 "기존 키 사용"을 선택하고 키 경로를 입력하세요.
+
+---
+
+## 쉘 자동완성
+
+### Bash
+
+```bash
+echo 'eval "$(ghem completion --shell bash)"' >> ~/.bashrc
+```
+
+### Zsh
+
+```bash
+echo 'eval "$(ghem completion --shell zsh)"' >> ~/.zshrc
+```
+
+`switch`/`delete` 명령어에서 프로필 이름, `config set-lang`에서 언어 옵션이 탭 자동완성됩니다.
 
 ---
 

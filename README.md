@@ -106,6 +106,8 @@ All configuration is stored in `~/.git-env-manager/`:
 | `ghem switch <profile>` | Switch global Git profile and SSH key |
 | `ghem delete <profile>` | Delete a profile and its associated keys |
 | `ghem list` | Show all registered profiles |
+| `ghem config set-lang <locale>` | Set display language (en, ko) |
+| `ghem completion` | Output shell completion script |
 
 Both `ghem` and `git-env-manager` work as CLI commands.
 
@@ -122,6 +124,24 @@ ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
 ```
 
 Then register the public key on your GitHub/GitLab account. When you run `ghem add` and choose "Use existing key", point to your key path.
+
+---
+
+## Shell Completion
+
+### Bash
+
+```bash
+echo 'eval "$(ghem completion --shell bash)"' >> ~/.bashrc
+```
+
+### Zsh
+
+```bash
+echo 'eval "$(ghem completion --shell zsh)"' >> ~/.zshrc
+```
+
+Tab completion supports command names, profile names for `switch`/`delete`, and language options for `config set-lang`.
 
 ---
 

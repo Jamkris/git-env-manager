@@ -5,6 +5,7 @@ import { registerSwitchCommand } from './commands/switch.js';
 import { registerListCommand } from './commands/list.js';
 import { registerDeleteCommand } from './commands/delete.js';
 import { registerConfigCommand } from './commands/config.js';
+import { registerCompletionCommand } from './commands/completion.js';
 import { t } from './i18n/index.js';
 import * as logger from './utils/logger.js';
 
@@ -21,6 +22,7 @@ registerSwitchCommand(program);
 registerListCommand(program);
 registerDeleteCommand(program);
 registerConfigCommand(program);
+registerCompletionCommand(program);
 
 program.parseAsync(process.argv).catch((err: unknown) => {
   logger.error(t().unexpectedError);
