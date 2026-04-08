@@ -1,6 +1,6 @@
 {
 	"name": "git-persona",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Multi-git-profile manager with SSH key integration",
 	"type": "module",
 	"bin": {
