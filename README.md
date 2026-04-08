@@ -79,7 +79,7 @@ SSH keys are copied to `~/.gh-persona/keys/{profile}/` with proper permissions (
 
 All configuration is stored in `~/.gh-persona/`:
 
-```
+```text
 ~/.gh-persona/
 ├── config.json              # Profile definitions
 ├── keys/
@@ -104,7 +104,7 @@ All configuration is stored in `~/.gh-persona/`:
 | `ghem switch <profile>` | Switch global Git profile and SSH key |
 | `ghem list` | Show all registered profiles |
 
-Both `gem` and `git-env-manager` work as CLI commands.
+Both `ghem` and `git-env-manager` work as CLI commands.
 
 ---
 

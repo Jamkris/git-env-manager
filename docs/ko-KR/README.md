@@ -79,7 +79,7 @@ SSH 키는 `~/.gh-persona/keys/{profile}/`에 복사되며 적절한 권한(`060
 
 모든 설정은 `~/.gh-persona/`에 저장됩니다:
 
-```
+```text
 ~/.gh-persona/
 ├── config.json              # 프로필 정의
 ├── keys/
@@ -104,7 +104,7 @@ SSH 키는 `~/.gh-persona/keys/{profile}/`에 복사되며 적절한 권한(`060
 | `ghem switch <profile>` | 전역 Git 프로필 및 SSH 키 전환 |
 | `ghem list` | 등록된 프로필 목록 출력 |
 
-`gem`과 `git-env-manager` 두 명령어 모두 사용 가능합니다.
+`ghem`과 `git-env-manager` 두 명령어 모두 사용 가능합니다.
 
 ---
 
