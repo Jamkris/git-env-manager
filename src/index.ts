@@ -7,6 +7,7 @@ import { registerDeleteCommand } from './commands/delete.js';
 import { registerConfigCommand } from './commands/config.js';
 import { registerCompletionCommand } from './commands/completion.js';
 import { registerStatusCommand } from './commands/status.js';
+import { registerEditCommand } from './commands/edit.js';
 import { t } from './i18n/index.js';
 import { configExists, readConfig } from './core/config.js';
 import * as logger from './utils/logger.js';
@@ -35,6 +36,7 @@ registerDeleteCommand(program);
 registerConfigCommand(program);
 registerCompletionCommand(program);
 registerStatusCommand(program);
+registerEditCommand(program);
 
 program.parseAsync(process.argv).catch((err: unknown) => {
   logger.error(t().unexpectedError);

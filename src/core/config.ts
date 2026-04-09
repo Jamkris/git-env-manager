@@ -74,6 +74,13 @@ export function addProfile(config: PersonaConfig, profile: Profile): PersonaConf
   };
 }
 
+export function updateProfile(config: PersonaConfig, name: string, updated: Profile): PersonaConfig {
+  return {
+    ...config,
+    profiles: config.profiles.map((p) => (p.name === name ? updated : p)),
+  };
+}
+
 export function removeProfile(config: PersonaConfig, name: string): PersonaConfig {
   return {
     ...config,
