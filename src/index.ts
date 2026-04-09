@@ -24,7 +24,7 @@ const program = new Command();
 program
   .name('ghem')
   .description('A CLI tool for managing multiple Git profiles and SSH keys')
-  .version('1.2.0');
+  .version('1.2.1');
 
 registerInitCommand(program);
 registerAddCommand(program);

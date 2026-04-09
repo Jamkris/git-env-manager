@@ -26,7 +26,13 @@ npm install -g git-env-manager
 ghem init
 ```
 
-`~/.git-env-manager/` 디렉토리와 초기 설정 파일이 생성됩니다.
+`~/.git-env-manager/` 디렉토리와 초기 설정 파일이 생성됩니다. 기본 언어는 영어입니다.
+
+한국어로 초기화하려면:
+
+```bash
+ghem init --lang ko
+```
 
 ### 프로필 추가
 
@@ -101,7 +107,7 @@ SSH 키는 `~/.git-env-manager/keys/{profile}/`에 복사되며 적절한 권한
 
 | 명령어 | 설명 |
 |--------|------|
-| `ghem init` | `~/.git-env-manager/` 디렉토리와 초기 설정 파일 생성 |
+| `ghem init [--lang <locale>]` | `~/.git-env-manager/` 디렉토리와 초기 설정 파일 생성 |
 | `ghem add <profile>` | 대화형 프롬프트로 새 프로필 추가 |
 | `ghem switch <profile>` | 전역 Git 프로필 및 SSH 키 전환 |
 | `ghem delete <profile>` | 프로필 및 관련 키 삭제 |
@@ -113,17 +119,40 @@ SSH 키는 `~/.git-env-manager/keys/{profile}/`에 복사되며 적절한 권한
 
 ---
 
-## SSH 키 생성 가이드
+## SSH 키 설정
 
-`ghem add` 명령어에서 SSH 키를 **자동 생성**할 수 있습니다. 대화형 프롬프트에서 "새 ed25519 키 생성"을 선택하세요.
+`ghem add` 실행 시 SSH 키 설정 방법을 선택합니다:
 
-수동으로 키를 생성하려면:
+1. **새 키 생성** (권장) — `~/.ssh/id_ghem_{profile}` 경로에 키 쌍을 자동 생성하고, 공개키를 표시합니다. 이를 GitHub/GitLab에 등록하세요.
+2. **기존 키 사용** — 기존 개인키 경로를 입력합니다 (예: `~/.ssh/id_rsa`).
+
+`ghem add` 실행 전에 수동으로 키를 생성하려면:
 
 ```bash
-ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
+ssh-keygen -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
 ```
 
-생성된 공개키를 GitHub/GitLab 계정에 등록한 후, `ghem add`에서 "기존 키 사용"을 선택하고 키 경로를 입력하세요.
+이후 `ghem add`에서 "기존 키 사용"을 선택하고 경로를 입력하세요.
+
+---
+
+## 언어 설정
+
+영어(`en`)와 한국어(`ko`)를 지원합니다. 기본값은 영어입니다.
+
+초기화 시 언어 설정:
+
+```bash
+ghem init --lang ko
+```
+
+이후 변경:
+
+```bash
+ghem config set-lang ko
+```
+
+모든 프롬프트, 메시지, 에러가 선택한 언어로 표시됩니다. `--help`의 명령어 설명은 영어로 유지됩니다.
 
 ---
 

@@ -1,6 +1,6 @@
 {
 	"name": "git-env-manager",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Multi-git-profile manager with SSH key integration",
 	"type": "module",
 	"bin": {
