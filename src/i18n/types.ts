@@ -62,6 +62,7 @@ export interface Messages {
   // Completion
   completionInstalled: (rcFile: string) => string;
   completionAlreadyInstalled: string;
+  completionFailed: (rcFile: string) => string;
 
   // General
   unexpectedError: string;

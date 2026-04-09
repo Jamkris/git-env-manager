@@ -60,6 +60,7 @@ export const ko: Messages = {
   // Completion
   completionInstalled: (rcFile) => `쉘 자동완성이 ${rcFile}에 설치되었습니다. 터미널을 재시작하면 활성화됩니다.`,
   completionAlreadyInstalled: '쉘 자동완성이 이미 설치되어 있습니다.',
+  completionFailed: (rcFile) => `${rcFile}에 쉘 자동완성 설치에 실패했습니다. 수동으로 추가하세요: eval "$(ghem completion)"`,
 
   // General
   unexpectedError: '예상치 못한 오류가 발생했습니다.',

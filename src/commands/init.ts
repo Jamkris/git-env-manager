@@ -18,10 +18,16 @@ function ensureDirectories(): void {
 
 function setupCompletion(): void {
   const result = installCompletion();
-  if (result.installed) {
-    logger.success(t().completionInstalled(result.rcFile));
-  } else {
-    logger.info(t().completionAlreadyInstalled);
+  switch (result.status) {
+    case 'installed':
+      logger.success(t().completionInstalled(result.rcFile));
+      break;
+    case 'already_installed':
+      logger.info(t().completionAlreadyInstalled);
+      break;
+    case 'failed':
+      logger.warn(t().completionFailed(result.rcFile));
+      break;
   }
 }
 

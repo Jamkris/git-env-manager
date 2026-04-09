@@ -109,27 +109,32 @@ export function generateCompletionScript(shell: string): string {
 
 const COMPLETION_MARKER = '# ghem shell completion';
 
-export function installCompletion(): { installed: boolean; shell: string; rcFile: string } {
+export type InstallResult =
+  | { status: 'installed'; shell: string; rcFile: string }
+  | { status: 'already_installed'; shell: string; rcFile: string }
+  | { status: 'failed'; shell: string; rcFile: string };
+
+export function installCompletion(): InstallResult {
   const shell = detectShell();
   const rcFile = shell === 'zsh'
     ? join(homedir(), '.zshrc')
     : join(homedir(), '.bashrc');
 
-  // Skip if already installed
-  if (existsSync(rcFile)) {
-    const content = readFileSync(rcFile, 'utf-8');
-    if (content.includes(COMPLETION_MARKER)) {
-      return { installed: false, shell, rcFile };
-    }
-  }
-
   try {
+    // Skip if already installed
+    if (existsSync(rcFile)) {
+      const content = readFileSync(rcFile, 'utf-8');
+      if (content.includes(COMPLETION_MARKER)) {
+        return { status: 'already_installed', shell, rcFile };
+      }
+    }
+
     const line = `\n${COMPLETION_MARKER}\neval "$(ghem completion --shell ${shell})"\n`;
     appendFileSync(rcFile, line, 'utf-8');
+    return { status: 'installed', shell, rcFile };
   } catch {
-    return { installed: false, shell, rcFile };
+    return { status: 'failed', shell, rcFile };
   }
-  return { installed: true, shell, rcFile };
 }
 
 export function registerCompletionCommand(program: Command): void {
