@@ -93,6 +93,10 @@ export const ko: Messages = {
   // Status (detail)
   statusGitConfig: 'Git 설정:',
 
+  // Update check
+  updateAvailable: (current, latest) => `새 버전이 있습니다: ${current} → ${latest}`,
+  updateCommand: '업데이트: npm install -g git-env-manager',
+
   // General
   unexpectedError: '예상치 못한 오류가 발생했습니다.',
 };

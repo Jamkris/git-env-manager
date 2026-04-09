@@ -95,6 +95,10 @@ export interface Messages {
   // Status (detail)
   statusGitConfig: string;
 
+  // Update check
+  updateAvailable: (current: string, latest: string) => string;
+  updateCommand: string;
+
   // General
   unexpectedError: string;
 }
