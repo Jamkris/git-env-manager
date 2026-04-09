@@ -37,6 +37,7 @@ import {
   configExists,
   getProfile,
   addProfile,
+  updateProfile,
   removeProfile,
   PersonaError,
 } from '../../src/core/config.js';
@@ -199,6 +200,104 @@ describe('config', () => {
       expect(updated.profiles[0].name).toBe('work');
       // Original unchanged (immutability)
       expect(original.profiles).toHaveLength(0);
+    });
+  });
+
+  describe('updateProfile', () => {
+    it('replaces profile by name (immutable)', () => {
+      const config: PersonaConfig = {
+        version: 1,
+        locale: 'en',
+        activeProfile: null,
+        profiles: [
+          {
+            name: 'personal',
+            gitUserName: 'Old Name',
+            gitUserEmail: 'old@email.com',
+            sshKeyPath: 'id_ghem_personal',
+            directories: [],
+          },
+        ],
+      };
+
+      const updated = updateProfile(config, 'personal', {
+        name: 'personal',
+        gitUserName: 'New Name',
+        gitUserEmail: 'new@email.com',
+        sshKeyPath: 'id_ghem_personal',
+        directories: ['~/work/'],
+      });
+
+      expect(updated.profiles[0].gitUserName).toBe('New Name');
+      expect(updated.profiles[0].gitUserEmail).toBe('new@email.com');
+      expect(updated.profiles[0].directories).toEqual(['~/work/']);
+      // Original unchanged
+      expect(config.profiles[0].gitUserName).toBe('Old Name');
+    });
+
+    it('returns unchanged config when profile name not found', () => {
+      const config: PersonaConfig = {
+        version: 1,
+        locale: 'en',
+        activeProfile: null,
+        profiles: [
+          {
+            name: 'personal',
+            gitUserName: 'Jamkris',
+            gitUserEmail: 'test@example.com',
+            sshKeyPath: 'id_ghem_personal',
+            directories: [],
+          },
+        ],
+      };
+
+      const updated = updateProfile(config, 'nonexistent', {
+        name: 'nonexistent',
+        gitUserName: 'New',
+        gitUserEmail: 'new@test.com',
+        sshKeyPath: 'id_ghem_new',
+        directories: [],
+      });
+
+      expect(updated.profiles).toEqual(config.profiles);
+      // Original unchanged
+      expect(config.profiles).toHaveLength(1);
+      expect(config.profiles[0].gitUserName).toBe('Jamkris');
+    });
+
+    it('does not modify other profiles', () => {
+      const config: PersonaConfig = {
+        version: 1,
+        locale: 'en',
+        activeProfile: null,
+        profiles: [
+          {
+            name: 'personal',
+            gitUserName: 'Personal',
+            gitUserEmail: 'p@test.com',
+            sshKeyPath: 'id_ghem_personal',
+            directories: [],
+          },
+          {
+            name: 'work',
+            gitUserName: 'Work',
+            gitUserEmail: 'w@test.com',
+            sshKeyPath: 'id_ghem_work',
+            directories: [],
+          },
+        ],
+      };
+
+      const updated = updateProfile(config, 'work', {
+        name: 'work',
+        gitUserName: 'Updated Work',
+        gitUserEmail: 'w@test.com',
+        sshKeyPath: 'id_ghem_work',
+        directories: [],
+      });
+
+      expect(updated.profiles[0].gitUserName).toBe('Personal');
+      expect(updated.profiles[1].gitUserName).toBe('Updated Work');
     });
   });
 

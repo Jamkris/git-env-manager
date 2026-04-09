@@ -63,6 +63,36 @@ export const en: Messages = {
   completionFailed: (rcFile) => `Failed to install shell completion in ${rcFile}. You can add it manually: eval "$(ghem completion)"`,
   completionUnsupported: 'Shell not recognized. Run `ghem completion --shell bash` or `ghem completion --shell zsh` to get the completion script manually.',
 
+  // Status command
+  statusDirectory: 'Directory:',
+  statusProfile: 'Profile:',
+  statusAutoSwitch: '(auto-switch)',
+  statusActive: '(active)',
+  statusActiveNoMatch: '(active, no directory match)',
+  statusName: 'Name:',
+  statusEmail: 'Email:',
+  statusSshKey: 'SSH Key:',
+  statusNoProfileMatch: 'No profile matches the current directory.',
+  statusNoActiveProfile: 'No active profile set.',
+
+  // Edit command
+  editNotChanged: 'No changes made.',
+  editSuccess: (name) => `Profile '${name}' has been updated.`,
+  editCurrentValue: (field, value) => `${field} (current: ${value}):`,
+  editDirectoriesCurrent: (dirs) => `Auto-switch directories (current: ${dirs}):`,
+  editSshKeyAction: 'SSH key action:',
+  editSshKeyKeep: 'Keep current key',
+  editSshKeyGenerate: 'Generate new SSH key',
+  editSshKeyExisting: 'Use different existing key',
+
+  // Test command
+  testConnecting: (host, profile) => `Testing SSH connection to ${host} with profile '${profile}'...`,
+  testSuccess: (host, username) => `Success! Authenticated to ${host} as '${username}'.`,
+  testFailed: (host) => `Failed to authenticate to ${host}.`,
+
+  // Status (detail)
+  statusGitConfig: 'Git config:',
+
   // General
   unexpectedError: 'An unexpected error occurred.',
 };

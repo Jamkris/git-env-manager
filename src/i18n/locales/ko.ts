@@ -63,6 +63,36 @@ export const ko: Messages = {
   completionFailed: (rcFile) => `${rcFile}에 쉘 자동완성 설치에 실패했습니다. 수동으로 추가하세요: eval "$(ghem completion)"`,
   completionUnsupported: '쉘을 인식할 수 없습니다. `ghem completion --shell bash` 또는 `ghem completion --shell zsh`로 직접 스크립트를 확인하세요.',
 
+  // Status command
+  statusDirectory: '디렉토리:',
+  statusProfile: '프로필:',
+  statusAutoSwitch: '(자동 전환)',
+  statusActive: '(활성)',
+  statusActiveNoMatch: '(활성, 디렉토리 매칭 없음)',
+  statusName: '이름:',
+  statusEmail: '이메일:',
+  statusSshKey: 'SSH 키:',
+  statusNoProfileMatch: '현재 디렉토리와 일치하는 프로필이 없습니다.',
+  statusNoActiveProfile: '활성 프로필이 설정되지 않았습니다.',
+
+  // Edit command
+  editNotChanged: '변경 사항이 없습니다.',
+  editSuccess: (name) => `프로필 '${name}'이(가) 수정되었습니다.`,
+  editCurrentValue: (field, value) => `${field} (현재: ${value}):`,
+  editDirectoriesCurrent: (dirs) => `자동 전환 디렉토리 (현재: ${dirs}):`,
+  editSshKeyAction: 'SSH 키 작업:',
+  editSshKeyKeep: '현재 키 유지',
+  editSshKeyGenerate: '새 SSH 키 생성',
+  editSshKeyExisting: '다른 기존 키 사용',
+
+  // Test command
+  testConnecting: (host, profile) => `프로필 '${profile}'로 ${host}에 SSH 연결 테스트 중...`,
+  testSuccess: (host, username) => `성공! ${host}에 '${username}'(으)로 인증되었습니다.`,
+  testFailed: (host) => `${host}에 인증에 실패했습니다.`,
+
+  // Status (detail)
+  statusGitConfig: 'Git 설정:',
+
   // General
   unexpectedError: '예상치 못한 오류가 발생했습니다.',
 };

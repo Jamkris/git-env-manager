@@ -65,6 +65,36 @@ export interface Messages {
   completionFailed: (rcFile: string) => string;
   completionUnsupported: string;
 
+  // Status command
+  statusDirectory: string;
+  statusProfile: string;
+  statusAutoSwitch: string;
+  statusActive: string;
+  statusActiveNoMatch: string;
+  statusName: string;
+  statusEmail: string;
+  statusSshKey: string;
+  statusNoProfileMatch: string;
+  statusNoActiveProfile: string;
+
+  // Edit command
+  editNotChanged: string;
+  editSuccess: (name: string) => string;
+  editCurrentValue: (field: string, value: string) => string;
+  editDirectoriesCurrent: (dirs: string) => string;
+  editSshKeyAction: string;
+  editSshKeyKeep: string;
+  editSshKeyGenerate: string;
+  editSshKeyExisting: string;
+
+  // Test command
+  testConnecting: (host: string, profile: string) => string;
+  testSuccess: (host: string, username: string) => string;
+  testFailed: (host: string) => string;
+
+  // Status (detail)
+  statusGitConfig: string;
+
   // General
   unexpectedError: string;
 }
