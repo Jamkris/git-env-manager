@@ -32,12 +32,12 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Jamkris/git-persona.git"
+		"url": "https://github.com/Jamkris/git-env-manager"
 	},
 	"bugs": {
-		"url": "https://github.com/Jamkris/git-persona/issues"
+		"url": "https://github.com/Jamkris/git-env-manager/issues"
 	},
-	"homepage": "https://github.com/Jamkris/git-persona#readme",
+	"homepage": "https://github.com/Jamkris/git-env-manager#readme",
 	"dependencies": {
 		"@inquirer/prompts": "^8.4.1",
 		"chalk": "^5.6.2",
