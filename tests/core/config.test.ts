@@ -235,6 +235,36 @@ describe('config', () => {
       expect(config.profiles[0].gitUserName).toBe('Old Name');
     });
 
+    it('returns unchanged config when profile name not found', () => {
+      const config: PersonaConfig = {
+        version: 1,
+        locale: 'en',
+        activeProfile: null,
+        profiles: [
+          {
+            name: 'personal',
+            gitUserName: 'Jamkris',
+            gitUserEmail: 'test@example.com',
+            sshKeyPath: 'id_ghem_personal',
+            directories: [],
+          },
+        ],
+      };
+
+      const updated = updateProfile(config, 'nonexistent', {
+        name: 'nonexistent',
+        gitUserName: 'New',
+        gitUserEmail: 'new@test.com',
+        sshKeyPath: 'id_ghem_new',
+        directories: [],
+      });
+
+      expect(updated.profiles).toEqual(config.profiles);
+      // Original unchanged
+      expect(config.profiles).toHaveLength(1);
+      expect(config.profiles[0].gitUserName).toBe('Jamkris');
+    });
+
     it('does not modify other profiles', () => {
       const config: PersonaConfig = {
         version: 1,

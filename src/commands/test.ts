@@ -22,7 +22,7 @@ export function parseAuthResult(stderr: string, exitCode: number): { success: bo
 
   // Broad fallback: "successfully authenticated"
   if (stderr.toLowerCase().includes('successfully authenticated')) {
-    const nameMatch = stderr.match(/Hi (\S+)|@(\S+)/);
+    const nameMatch = stderr.match(/Hi (\S+?)!|@(\S+?)!/);
     return { success: true, username: nameMatch?.[1] ?? nameMatch?.[2] ?? 'unknown' };
   }
 
@@ -47,7 +47,7 @@ export function registerTestCommand(program: Command): void {
         const keyPath = join(KEYS_DIR, profile.name, profile.sshKeyPath);
 
         if (!existsSync(keyPath)) {
-          logger.error(t().testKeyNotFound(keyPath));
+          logger.error(t().sshKeyNotFound(keyPath));
           process.exit(1);
         }
 

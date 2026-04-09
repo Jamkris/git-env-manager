@@ -9,7 +9,7 @@ describe('parseAuthResult', () => {
       expect(result.username).toBe('Jamkris');
     });
 
-    it('rejects GitHub message with wrong exit code', () => {
+    it('falls back to broad match when exit code differs from GitHub pattern', () => {
       const result = parseAuthResult('Hi Jamkris! You\'ve successfully authenticated.', 0);
       // exit code 0 is not GitHub's pattern, but falls through to broad fallback
       expect(result.success).toBe(true);

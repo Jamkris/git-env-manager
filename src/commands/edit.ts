@@ -48,7 +48,7 @@ export function registerEditCommand(program: Command): void {
         if (sshAction === 'generate') {
           try {
             const result = generateSshKey(gitUserEmail, profileName);
-            const keyFileName = result.privatePath.split('/').pop()!;
+            const keyFileName = result.privatePath.split('/').pop() ?? result.privatePath;
             copyKeyPair(result.privatePath, profileName);
             sshKeyPath = keyFileName;
             logger.success(t().sshKeyGenerated(result.publicPath));
@@ -71,7 +71,7 @@ export function registerEditCommand(program: Command): void {
             message: t().sshKeyPrompt,
             default: `~/.ssh/id_ghem_${profileName}`,
           });
-          const keyFileName = sshKeySource.split('/').pop()!;
+          const keyFileName = sshKeySource.split('/').pop() ?? sshKeySource;
           copyKeyPair(sshKeySource, profileName);
           sshKeyPath = keyFileName;
           logger.success(t().sshKeyCopied(`~/.git-env-manager/keys/${profileName}/`));

@@ -91,7 +91,9 @@ export interface Messages {
   testConnecting: (host: string, profile: string) => string;
   testSuccess: (host: string, username: string) => string;
   testFailed: (host: string) => string;
-  testKeyNotFound: (path: string) => string;
+
+  // Status (detail)
+  statusGitConfig: string;
 
   // General
   unexpectedError: string;

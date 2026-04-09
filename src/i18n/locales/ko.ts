@@ -89,7 +89,9 @@ export const ko: Messages = {
   testConnecting: (host, profile) => `프로필 '${profile}'로 ${host}에 SSH 연결 테스트 중...`,
   testSuccess: (host, username) => `성공! ${host}에 '${username}'(으)로 인증되었습니다.`,
   testFailed: (host) => `${host}에 인증에 실패했습니다.`,
-  testKeyNotFound: (path) => `SSH 키를 찾을 수 없습니다: ${path}`,
+
+  // Status (detail)
+  statusGitConfig: 'Git 설정:',
 
   // General
   unexpectedError: '예상치 못한 오류가 발생했습니다.',

@@ -89,7 +89,9 @@ export const en: Messages = {
   testConnecting: (host, profile) => `Testing SSH connection to ${host} with profile '${profile}'...`,
   testSuccess: (host, username) => `Success! Authenticated to ${host} as '${username}'.`,
   testFailed: (host) => `Failed to authenticate to ${host}.`,
-  testKeyNotFound: (path) => `SSH key not found: ${path}`,
+
+  // Status (detail)
+  statusGitConfig: 'Git config:',
 
   // General
   unexpectedError: 'An unexpected error occurred.',

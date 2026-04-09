@@ -46,10 +46,16 @@ describe('findMatchingProfile', () => {
     expect(result!.name).toBe('work');
   });
 
-  it('matches cwd exactly at directory root', () => {
+  it('matches cwd inside a profile directory (subdirectory)', () => {
     const result = findMatchingProfile('/Users/home/projects/my-app', profiles);
     expect(result).toBeDefined();
     expect(result!.name).toBe('personal');
+  });
+
+  it('matches cwd exactly at directory root', () => {
+    const result = findMatchingProfile('/Users/home/work', profiles);
+    expect(result).toBeDefined();
+    expect(result!.name).toBe('work');
   });
 
   it('matches second directory of a profile', () => {

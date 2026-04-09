@@ -44,7 +44,7 @@ export function registerStatusCommand(program: Command): void {
 
         if (gitName || gitEmail) {
           console.log('');
-          console.log(`  Git config: ${gitName} <${gitEmail}>`);
+          console.log(`  ${t().statusGitConfig} ${gitName} <${gitEmail}>`);
         }
 
         console.log('');
