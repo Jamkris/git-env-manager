@@ -59,6 +59,10 @@ export interface Messages {
   langUpdated: (locale: string) => string;
   langInvalid: (locale: string) => string;
 
+  // Completion
+  completionInstalled: (rcFile: string) => string;
+  completionAlreadyInstalled: string;
+
   // General
   unexpectedError: string;
 }

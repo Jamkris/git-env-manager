@@ -57,6 +57,10 @@ export const en: Messages = {
   langUpdated: (locale) => `Language changed to '${locale}'.`,
   langInvalid: (locale) => `Invalid language '${locale}'. Supported: en, ko`,
 
+  // Completion
+  completionInstalled: (rcFile) => `Shell completion installed in ${rcFile}. Restart your terminal to activate.`,
+  completionAlreadyInstalled: 'Shell completion is already installed.',
+
   // General
   unexpectedError: 'An unexpected error occurred.',
 };

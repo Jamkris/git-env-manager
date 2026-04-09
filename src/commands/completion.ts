@@ -104,6 +104,31 @@ export function generateCompletionScript(shell: string): string {
   return shell === 'zsh' ? generateZshScript() : generateBashScript();
 }
 
+const COMPLETION_MARKER = '# ghem shell completion';
+
+export function installCompletion(): { installed: boolean; shell: string; rcFile: string } {
+  const { existsSync, readFileSync, appendFileSync } = require('node:fs') as typeof import('node:fs');
+  const { join } = require('node:path') as typeof import('node:path');
+  const { homedir } = require('node:os') as typeof import('node:os');
+
+  const shell = detectShell();
+  const rcFile = shell === 'zsh'
+    ? join(homedir(), '.zshrc')
+    : join(homedir(), '.bashrc');
+
+  // Skip if already installed
+  if (existsSync(rcFile)) {
+    const content = readFileSync(rcFile, 'utf-8');
+    if (content.includes(COMPLETION_MARKER)) {
+      return { installed: false, shell, rcFile };
+    }
+  }
+
+  const line = `\n${COMPLETION_MARKER}\neval "$(ghem completion --shell ${shell})"\n`;
+  appendFileSync(rcFile, line, 'utf-8');
+  return { installed: true, shell, rcFile };
+}
+
 export function registerCompletionCommand(program: Command): void {
   program
     .command('completion')

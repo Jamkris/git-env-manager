@@ -57,6 +57,10 @@ export const ko: Messages = {
   langUpdated: (locale) => `언어가 '${locale}'(으)로 변경되었습니다.`,
   langInvalid: (locale) => `유효하지 않은 언어입니다: '${locale}'. 지원: en, ko`,
 
+  // Completion
+  completionInstalled: (rcFile) => `쉘 자동완성이 ${rcFile}에 설치되었습니다. 터미널을 재시작하면 활성화됩니다.`,
+  completionAlreadyInstalled: '쉘 자동완성이 이미 설치되어 있습니다.',
+
   // General
   unexpectedError: '예상치 못한 오류가 발생했습니다.',
 };

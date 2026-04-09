@@ -3,6 +3,7 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { confirm } from '@inquirer/prompts';
 import { PERSONA_DIR, KEYS_DIR } from '../core/paths.js';
 import { configExists, writeDefaultConfig, readConfig } from '../core/config.js';
+import { installCompletion } from './completion.js';
 import { isValidLocale, setLocale, t } from '../i18n/index.js';
 import * as logger from '../utils/logger.js';
 
@@ -12,6 +13,15 @@ function ensureDirectories(): void {
   }
   if (!existsSync(KEYS_DIR)) {
     mkdirSync(KEYS_DIR, { recursive: true });
+  }
+}
+
+function setupCompletion(): void {
+  const result = installCompletion();
+  if (result.installed) {
+    logger.success(t().completionInstalled(result.rcFile));
+  } else {
+    logger.info(t().completionAlreadyInstalled);
   }
 }
 
@@ -48,6 +58,7 @@ export function registerInitCommand(program: Command): void {
         ensureDirectories();
         writeDefaultConfig(effectiveLocale);
         setLocale(effectiveLocale);
+        setupCompletion();
         logger.success(t().initSuccess);
         return;
       }
@@ -55,6 +66,7 @@ export function registerInitCommand(program: Command): void {
       setLocale(locale);
       ensureDirectories();
       writeDefaultConfig(locale);
+      setupCompletion();
       logger.success(t().initSuccess);
     });
 }
