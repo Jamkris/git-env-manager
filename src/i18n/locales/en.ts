@@ -24,7 +24,7 @@ export const en: Messages = {
   sshKeyPrompt: 'SSH private key path:',
   sshAgentFailed: 'Failed to switch SSH agent key. Make sure ssh-agent is running.',
   sshKeyChoice: 'SSH key setup:',
-  sshKeyChoiceGenerate: 'Generate new ed25519 key (recommended)',
+  sshKeyChoiceGenerate: 'Generate new SSH key (recommended)',
   sshKeyChoiceExisting: 'Use existing key',
   sshKeyGenerated: (pubPath) => `SSH key generated. Public key: ${pubPath}`,
   sshKeyAlreadyExists: (path) => `SSH key already exists at: ${path}`,
@@ -56,6 +56,12 @@ export const en: Messages = {
   // Config command
   langUpdated: (locale) => `Language changed to '${locale}'.`,
   langInvalid: (locale) => `Invalid language '${locale}'. Supported: en, ko`,
+
+  // Completion
+  completionInstalled: (rcFile) => `Shell completion installed in ${rcFile}. Restart your terminal to activate.`,
+  completionAlreadyInstalled: 'Shell completion is already installed.',
+  completionFailed: (rcFile) => `Failed to install shell completion in ${rcFile}. You can add it manually: eval "$(ghem completion)"`,
+  completionUnsupported: 'Shell not recognized. Run `ghem completion --shell bash` or `ghem completion --shell zsh` to get the completion script manually.',
 
   // General
   unexpectedError: 'An unexpected error occurred.',

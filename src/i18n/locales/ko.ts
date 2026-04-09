@@ -24,7 +24,7 @@ export const ko: Messages = {
   sshKeyPrompt: 'SSH 개인키 경로:',
   sshAgentFailed: 'SSH 에이전트 키 전환에 실패했습니다. SSH 에이전트가 실행 중인지 확인하세요.',
   sshKeyChoice: 'SSH 키 설정:',
-  sshKeyChoiceGenerate: '새 ed25519 키 생성 (권장)',
+  sshKeyChoiceGenerate: '새 SSH 키 생성 (권장)',
   sshKeyChoiceExisting: '기존 키 사용',
   sshKeyGenerated: (pubPath) => `SSH 키가 생성되었습니다. 공개키: ${pubPath}`,
   sshKeyAlreadyExists: (path) => `SSH 키가 이미 존재합니다: ${path}`,
@@ -56,6 +56,12 @@ export const ko: Messages = {
   // Config command
   langUpdated: (locale) => `언어가 '${locale}'(으)로 변경되었습니다.`,
   langInvalid: (locale) => `유효하지 않은 언어입니다: '${locale}'. 지원: en, ko`,
+
+  // Completion
+  completionInstalled: (rcFile) => `쉘 자동완성이 ${rcFile}에 설치되었습니다. 터미널을 재시작하면 활성화됩니다.`,
+  completionAlreadyInstalled: '쉘 자동완성이 이미 설치되어 있습니다.',
+  completionFailed: (rcFile) => `${rcFile}에 쉘 자동완성 설치에 실패했습니다. 수동으로 추가하세요: eval "$(ghem completion)"`,
+  completionUnsupported: '쉘을 인식할 수 없습니다. `ghem completion --shell bash` 또는 `ghem completion --shell zsh`로 직접 스크립트를 확인하세요.',
 
   // General
   unexpectedError: '예상치 못한 오류가 발생했습니다.',
