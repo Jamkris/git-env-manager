@@ -1,4 +1,7 @@
 import type { Command } from 'commander';
+import { existsSync, readFileSync, appendFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { homedir } from 'node:os';
 
 function detectShell(): string {
   const shell = process.env.SHELL ?? '';
@@ -107,10 +110,6 @@ export function generateCompletionScript(shell: string): string {
 const COMPLETION_MARKER = '# ghem shell completion';
 
 export function installCompletion(): { installed: boolean; shell: string; rcFile: string } {
-  const { existsSync, readFileSync, appendFileSync } = require('node:fs') as typeof import('node:fs');
-  const { join } = require('node:path') as typeof import('node:path');
-  const { homedir } = require('node:os') as typeof import('node:os');
-
   const shell = detectShell();
   const rcFile = shell === 'zsh'
     ? join(homedir(), '.zshrc')
@@ -124,8 +123,12 @@ export function installCompletion(): { installed: boolean; shell: string; rcFile
     }
   }
 
-  const line = `\n${COMPLETION_MARKER}\neval "$(ghem completion --shell ${shell})"\n`;
-  appendFileSync(rcFile, line, 'utf-8');
+  try {
+    const line = `\n${COMPLETION_MARKER}\neval "$(ghem completion --shell ${shell})"\n`;
+    appendFileSync(rcFile, line, 'utf-8');
+  } catch {
+    return { installed: false, shell, rcFile };
+  }
   return { installed: true, shell, rcFile };
 }
 
