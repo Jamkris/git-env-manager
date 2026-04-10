@@ -88,6 +88,7 @@ if [ "$BRANCH" != "main" ]; then
     echo "   gh pr create --title 'chore: release v$VERSION' --body 'Bump version to $VERSION'"
     echo "4. After merge, push the tag: git push origin v$VERSION"
     echo "5. Check GitHub Actions for the Release process."
+    echo "OneLine Command) git push origin $BRANCH && gh pr create --title 'chore: release v$VERSION' --body 'Bump version to $VERSION'"
 else
     echo "3. Check GitHub Actions for the Release process."
 fi
