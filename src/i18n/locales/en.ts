@@ -59,12 +59,19 @@ export const en: Messages = {
   langInvalid: (locale) => `Invalid language '${locale}'. Supported: en, ko`,
   promptUpdated: (value) => `Prompt indicator set to '${value}'.`,
   promptInvalid: (value) => `Invalid value '${value}'. Use: on, off`,
+  promptInstalled: (rcFile) => `Prompt indicator installed in ${rcFile}. Restart your terminal to activate.`,
+  promptAlreadyInstalled: 'Prompt indicator is already installed in your shell config.',
+  promptFailed: (rcFile) => `Failed to install prompt indicator in ${rcFile}. Add it manually: eval "$(ghem prompt)"`,
+  promptUnsupported: 'Shell not recognized. Supported shells: bash, zsh, fish.',
 
   // Completion
   completionInstalled: (rcFile) => `Shell completion installed in ${rcFile}. Restart your terminal to activate.`,
   completionAlreadyInstalled: 'Shell completion is already installed.',
   completionFailed: (rcFile) => `Failed to install shell completion in ${rcFile}. You can add it manually: eval "$(ghem completion)"`,
   completionUnsupported: 'Shell not recognized. Run `ghem completion --shell bash` or `ghem completion --shell zsh` to get the completion script manually.',
+  completionInvalid: (value) => `Invalid value '${value}'. Use: on, off`,
+  completionUninstalled: (rcFile) => `Shell completion removed from ${rcFile}. Restart your terminal to apply.`,
+  completionNotInstalled: 'Shell completion is not installed.',
 
   // Status command
   statusDirectory: 'Directory:',

@@ -24,7 +24,7 @@ try {
   // Keep default locale if config is unreadable
 }
 
-const VERSION = '1.2.12';
+const VERSION = '1.2.13';
 
 const program = new Command();
 

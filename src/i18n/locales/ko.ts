@@ -59,12 +59,19 @@ export const ko: Messages = {
   langInvalid: (locale) => `유효하지 않은 언어입니다: '${locale}'. 지원: en, ko`,
   promptUpdated: (value) => `프롬프트 표시가 '${value}'(으)로 설정되었습니다.`,
   promptInvalid: (value) => `유효하지 않은 값입니다: '${value}'. 사용: on, off`,
+  promptInstalled: (rcFile) => `프롬프트 인디케이터가 ${rcFile}에 설치되었습니다. 터미널을 재시작하면 활성화됩니다.`,
+  promptAlreadyInstalled: '프롬프트 인디케이터가 이미 쉘 설정에 설치되어 있습니다.',
+  promptFailed: (rcFile) => `${rcFile}에 프롬프트 인디케이터 설치에 실패했습니다. 수동으로 추가하세요: eval "$(ghem prompt)"`,
+  promptUnsupported: '쉘을 인식할 수 없습니다. 지원 쉘: bash, zsh, fish.',
 
   // Completion
   completionInstalled: (rcFile) => `쉘 자동완성이 ${rcFile}에 설치되었습니다. 터미널을 재시작하면 활성화됩니다.`,
   completionAlreadyInstalled: '쉘 자동완성이 이미 설치되어 있습니다.',
   completionFailed: (rcFile) => `${rcFile}에 쉘 자동완성 설치에 실패했습니다. 수동으로 추가하세요: eval "$(ghem completion)"`,
   completionUnsupported: '쉘을 인식할 수 없습니다. `ghem completion --shell bash` 또는 `ghem completion --shell zsh`로 직접 스크립트를 확인하세요.',
+  completionInvalid: (value) => `유효하지 않은 값입니다: '${value}'. 사용: on, off`,
+  completionUninstalled: (rcFile) => `쉘 자동완성이 ${rcFile}에서 제거되었습니다. 터미널을 재시작하면 적용됩니다.`,
+  completionNotInstalled: '쉘 자동완성이 설치되어 있지 않습니다.',
 
   // Status command
   statusDirectory: '디렉토리:',

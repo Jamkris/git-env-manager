@@ -61,12 +61,19 @@ export interface Messages {
   langInvalid: (locale: string) => string;
   promptUpdated: (value: string) => string;
   promptInvalid: (value: string) => string;
+  promptInstalled: (rcFile: string) => string;
+  promptAlreadyInstalled: string;
+  promptFailed: (rcFile: string) => string;
+  promptUnsupported: string;
 
   // Completion
   completionInstalled: (rcFile: string) => string;
   completionAlreadyInstalled: string;
   completionFailed: (rcFile: string) => string;
   completionUnsupported: string;
+  completionInvalid: (value: string) => string;
+  completionUninstalled: (rcFile: string) => string;
+  completionNotInstalled: string;
 
   // Status command
   statusDirectory: string;

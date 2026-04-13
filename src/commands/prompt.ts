@@ -1,4 +1,7 @@
 import type { Command } from 'commander';
+import { existsSync, readFileSync, appendFileSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { homedir } from 'node:os';
 import { PersonaError } from '../core/config.js';
 import * as logger from '../utils/logger.js';
 
@@ -8,6 +11,18 @@ function detectShell(): string | null {
   if (shell.includes('bash')) return 'bash';
   if (shell.includes('fish')) return 'fish';
   return null;
+}
+
+function rcFileFor(shell: string): string {
+  const home = homedir();
+  switch (shell) {
+    case 'zsh':
+      return join(home, '.zshrc');
+    case 'fish':
+      return join(home, '.config', 'fish', 'config.fish');
+    default:
+      return join(home, '.bashrc');
+  }
 }
 
 const AWK_SCRIPT = `
@@ -84,6 +99,62 @@ function generateScript(shell: string): string {
       return generateZshScript();
     default:
       return generateBashScript();
+  }
+}
+
+const PROMPT_MARKER = '# ghem prompt indicator';
+
+function integrationLines(shell: string): string {
+  switch (shell) {
+    case 'zsh':
+      return `${PROMPT_MARKER}
+eval "$(ghem prompt --shell zsh)"
+setopt PROMPT_SUBST 2>/dev/null
+if [[ "$RPROMPT" != *__ghem_prompt* ]]; then
+  RPROMPT='$(__ghem_prompt)'"$RPROMPT"
+fi
+`;
+    case 'fish':
+      return `${PROMPT_MARKER}
+ghem prompt --shell fish | source
+function fish_right_prompt
+  __ghem_prompt
+end
+`;
+    default:
+      return `${PROMPT_MARKER}
+eval "$(ghem prompt --shell bash)"
+if [[ "$PS1" != *__ghem_prompt* ]]; then
+  PS1='$(__ghem_prompt)'"$PS1"
+fi
+`;
+  }
+}
+
+export type PromptInstallResult =
+  | { status: 'installed'; shell: string; rcFile: string }
+  | { status: 'already_installed'; shell: string; rcFile: string }
+  | { status: 'failed'; shell: string; rcFile: string }
+  | { status: 'unsupported'; shell: string; rcFile: string };
+
+export function installPromptIndicator(): PromptInstallResult {
+  const shell = detectShell();
+  if (!shell) {
+    return { status: 'unsupported', shell: process.env.SHELL ?? 'unknown', rcFile: '' };
+  }
+  const rcFile = rcFileFor(shell);
+  try {
+    if (existsSync(rcFile)) {
+      const content = readFileSync(rcFile, 'utf-8');
+      if (content.includes(PROMPT_MARKER)) {
+        return { status: 'already_installed', shell, rcFile };
+      }
+    }
+    mkdirSync(dirname(rcFile), { recursive: true });
+    appendFileSync(rcFile, `\n${integrationLines(shell)}`, 'utf-8');
+    return { status: 'installed', shell, rcFile };
+  } catch {
+    return { status: 'failed', shell, rcFile };
   }
 }
 
