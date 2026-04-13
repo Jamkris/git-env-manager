@@ -14,11 +14,21 @@ export function registerStatusCommand(program: Command): void {
   program
     .command('status')
     .description('Show current profile context for the working directory')
-    .action(async () => {
+    .option('--short', 'Output only the profile name')
+    .action(async (opts: { short?: boolean }) => {
       try {
         const config = readConfig();
         const cwd = process.cwd();
         const matched = findMatchingProfile(cwd, config.profiles);
+
+        if (opts.short) {
+          const profile = matched ?? (config.activeProfile ? getProfile(config, config.activeProfile) : undefined);
+          if (profile) {
+            process.stdout.write(profile.name);
+          }
+          return;
+        }
+
         const gitName = getGitConfig('user.name');
         const gitEmail = getGitConfig('user.email');
 

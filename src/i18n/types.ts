@@ -59,6 +59,8 @@ export interface Messages {
   // Config command
   langUpdated: (locale: string) => string;
   langInvalid: (locale: string) => string;
+  promptUpdated: (value: string) => string;
+  promptInvalid: (value: string) => string;
 
   // Completion
   completionInstalled: (rcFile: string) => string;

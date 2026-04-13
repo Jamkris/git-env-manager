@@ -113,8 +113,10 @@ All configuration is stored in `~/.git-env-manager/`:
 | `ghem delete <profile>` | Delete a profile and its associated keys |
 | `ghem list` | Show all registered profiles |
 | `ghem config set-lang <locale>` | Set display language (en, ko) |
+| `ghem config set-prompt <on\|off>` | Enable or disable shell prompt indicator |
 | `ghem completion` | Output shell completion script |
-| `ghem status` | Show current profile context for the working directory |
+| `ghem prompt [--shell <shell>]` | Output shell prompt indicator script |
+| `ghem status [--short]` | Show current profile context for the working directory |
 | `ghem edit <profile>` | Edit an existing profile interactively |
 | `ghem test <profile> [--host <hostname>]` | Test SSH connection for a profile |
 
@@ -203,6 +205,62 @@ ghem config set-lang ko
 ```
 
 All prompts, messages, and errors will be displayed in the selected language. Command descriptions in `--help` remain in English.
+
+---
+
+## Shell Prompt Indicator
+
+Show the current Git profile in your terminal prompt. The indicator updates automatically as you navigate between directories.
+
+```text
+~/work/project [work] $
+~/personal/blog [personal] $
+```
+
+### Setup
+
+Add one line to your shell config:
+
+**Bash** (`~/.bashrc`)
+
+```bash
+eval "$(ghem prompt --shell bash)"
+PS1='\w $(__ghem_prompt)\$ '
+```
+
+**Zsh** (`~/.zshrc`)
+
+```bash
+eval "$(ghem prompt --shell zsh)"
+RPROMPT='$(__ghem_prompt)'
+```
+
+**Fish** (`~/.config/fish/config.fish`)
+
+```fish
+ghem prompt --shell fish | source
+# Then use (__ghem_prompt) in your fish_prompt function
+```
+
+**Starship** (`~/.config/starship.toml`)
+
+```toml
+[custom.ghem]
+command = "ghem status --short"
+when = "test -f ~/.git-env-manager/config.json"
+format = "[$output]($style) "
+style = "bold cyan"
+```
+
+The prompt function uses `awk` to parse `config.json` directly — no Node.js process is spawned, so there is no noticeable delay.
+
+### Toggle
+
+The prompt indicator is enabled by default. To disable:
+
+```bash
+ghem config set-prompt off
+```
 
 ---
 

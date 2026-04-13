@@ -31,4 +31,28 @@ export function registerConfigCommand(program: Command): void {
         throw err;
       }
     });
+
+  configCmd
+    .command('set-prompt <on|off>')
+    .description('Enable or disable shell prompt indicator (on, off)')
+    .action(async (value: string) => {
+      try {
+        if (value !== 'on' && value !== 'off') {
+          logger.error(t().promptInvalid(value));
+          process.exit(1);
+        }
+
+        const config = readConfig();
+        const enabled = value === 'on';
+        const updated = { ...config, promptIndicator: enabled };
+        writeConfig(updated);
+        logger.success(t().promptUpdated(value));
+      } catch (err) {
+        if (err instanceof PersonaError) {
+          logger.error(err.message);
+          process.exit(1);
+        }
+        throw err;
+      }
+    });
 }

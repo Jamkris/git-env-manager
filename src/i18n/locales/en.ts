@@ -57,6 +57,8 @@ export const en: Messages = {
   // Config command
   langUpdated: (locale) => `Language changed to '${locale}'.`,
   langInvalid: (locale) => `Invalid language '${locale}'. Supported: en, ko`,
+  promptUpdated: (value) => `Prompt indicator set to '${value}'.`,
+  promptInvalid: (value) => `Invalid value '${value}'. Use: on, off`,
 
   // Completion
   completionInstalled: (rcFile) => `Shell completion installed in ${rcFile}. Restart your terminal to activate.`,

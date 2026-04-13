@@ -57,6 +57,8 @@ export const ko: Messages = {
   // Config command
   langUpdated: (locale) => `언어가 '${locale}'(으)로 변경되었습니다.`,
   langInvalid: (locale) => `유효하지 않은 언어입니다: '${locale}'. 지원: en, ko`,
+  promptUpdated: (value) => `프롬프트 표시가 '${value}'(으)로 설정되었습니다.`,
+  promptInvalid: (value) => `유효하지 않은 값입니다: '${value}'. 사용: on, off`,
 
   // Completion
   completionInstalled: (rcFile) => `쉘 자동완성이 ${rcFile}에 설치되었습니다. 터미널을 재시작하면 활성화됩니다.`,

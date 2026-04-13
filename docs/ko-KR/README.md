@@ -113,8 +113,10 @@ SSH 키는 `~/.git-env-manager/keys/{profile}/`에 복사되며 적절한 권한
 | `ghem delete <profile>` | 프로필 및 관련 키 삭제 |
 | `ghem list` | 등록된 프로필 목록 출력 |
 | `ghem config set-lang <locale>` | 표시 언어 설정 (en, ko) |
+| `ghem config set-prompt <on\|off>` | 쉘 프롬프트 표시 활성화/비활성화 |
 | `ghem completion` | 쉘 자동완성 스크립트 출력 |
-| `ghem status` | 현재 디렉토리의 프로필 컨텍스트 표시 |
+| `ghem prompt [--shell <shell>]` | 쉘 프롬프트 인디케이터 스크립트 출력 |
+| `ghem status [--short]` | 현재 디렉토리의 프로필 컨텍스트 표시 |
 | `ghem edit <profile>` | 기존 프로필을 대화형으로 수정 |
 | `ghem test <profile> [--host <hostname>]` | 프로필의 SSH 연결 테스트 |
 
@@ -203,6 +205,62 @@ ghem config set-lang ko
 ```
 
 모든 프롬프트, 메시지, 에러가 선택한 언어로 표시됩니다. `--help`의 명령어 설명은 영어로 유지됩니다.
+
+---
+
+## 쉘 프롬프트 인디케이터
+
+터미널 프롬프트에 현재 활성 Git 프로필을 자동으로 표시합니다. 디렉토리를 이동할 때마다 자동 업데이트됩니다.
+
+```text
+~/work/project [work] $
+~/personal/blog [personal] $
+```
+
+### 설정 방법
+
+쉘 설정 파일에 한 줄을 추가하세요:
+
+**Bash** (`~/.bashrc`)
+
+```bash
+eval "$(ghem prompt --shell bash)"
+PS1='\w $(__ghem_prompt)\$ '
+```
+
+**Zsh** (`~/.zshrc`)
+
+```bash
+eval "$(ghem prompt --shell zsh)"
+RPROMPT='$(__ghem_prompt)'
+```
+
+**Fish** (`~/.config/fish/config.fish`)
+
+```fish
+ghem prompt --shell fish | source
+# fish_prompt 함수에서 (__ghem_prompt) 사용
+```
+
+**Starship** (`~/.config/starship.toml`)
+
+```toml
+[custom.ghem]
+command = "ghem status --short"
+when = "test -f ~/.git-env-manager/config.json"
+format = "[$output]($style) "
+style = "bold cyan"
+```
+
+프롬프트 함수는 `awk`로 `config.json`을 직접 파싱하므로 Node.js 프로세스를 실행하지 않아 지연이 거의 없습니다.
+
+### 토글
+
+프롬프트 인디케이터는 기본으로 활성화되어 있습니다. 비활성화하려면:
+
+```bash
+ghem config set-prompt off
+```
 
 ---
 

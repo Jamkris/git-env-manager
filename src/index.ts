@@ -9,6 +9,7 @@ import { registerCompletionCommand } from './commands/completion.js';
 import { registerStatusCommand } from './commands/status.js';
 import { registerEditCommand } from './commands/edit.js';
 import { registerTestCommand } from './commands/test.js';
+import { registerPromptCommand } from './commands/prompt.js';
 import { checkForUpdates } from './utils/update-check.js';
 import { t } from './i18n/index.js';
 import { configExists, readConfig } from './core/config.js';
@@ -42,6 +43,7 @@ registerCompletionCommand(program);
 registerStatusCommand(program);
 registerEditCommand(program);
 registerTestCommand(program);
+registerPromptCommand(program);
 
 program.parseAsync(process.argv)
   .then(() => checkForUpdates(VERSION))

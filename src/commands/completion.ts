@@ -16,7 +16,7 @@ _ghem_completions() {
   local cur prev commands
   cur="\${COMP_WORDS[COMP_CWORD]}"
   prev="\${COMP_WORDS[COMP_CWORD-1]}"
-  commands="init add switch delete list config completion status edit test"
+  commands="init add switch delete list config completion status edit test prompt"
 
   case "\${prev}" in
     switch|delete|edit|test)
@@ -34,11 +34,29 @@ _ghem_completions() {
       return 0
       ;;
     config)
-      COMPREPLY=($(compgen -W "set-lang" -- "\${cur}"))
+      COMPREPLY=($(compgen -W "set-lang set-prompt" -- "\${cur}"))
       return 0
       ;;
     set-lang)
       COMPREPLY=($(compgen -W "en ko" -- "\${cur}"))
+      return 0
+      ;;
+    set-prompt)
+      COMPREPLY=($(compgen -W "on off" -- "\${cur}"))
+      return 0
+      ;;
+    --shell)
+      if [ "\${COMP_WORDS[1]}" = "prompt" ]; then
+        COMPREPLY=($(compgen -W "bash zsh fish" -- "\${cur}"))
+        return 0
+      fi
+      ;;
+    status)
+      COMPREPLY=($(compgen -W "--short" -- "\${cur}"))
+      return 0
+      ;;
+    prompt)
+      COMPREPLY=($(compgen -W "--shell" -- "\${cur}"))
       return 0
       ;;
     ghem)
@@ -71,6 +89,7 @@ _ghem_completions() {
     'status:Show current profile context for the working directory'
     'edit:Edit an existing profile'
     'test:Test SSH connection for a profile'
+    'prompt:Output shell prompt indicator script'
   )
 
   _arguments -C \\
@@ -96,7 +115,13 @@ _ghem_completions() {
           _describe 'profile' profiles
           ;;
         config)
-          _describe 'subcommand' '(set-lang:Set display language)'
+          _describe 'subcommand' '(set-lang:Set\ display\ language set-prompt:Enable\ or\ disable\ prompt\ indicator)'
+          ;;
+        prompt)
+          _arguments '--shell[Shell type]:shell:(bash zsh fish)'
+          ;;
+        status)
+          _arguments '--short[Output only the profile name]'
           ;;
       esac
       ;;
