@@ -45,6 +45,16 @@ _ghem_completions() {
       COMPREPLY=($(compgen -W "on off" -- "\${cur}"))
       return 0
       ;;
+    --shell)
+      if [ "\${COMP_WORDS[1]}" = "prompt" ]; then
+        COMPREPLY=($(compgen -W "bash zsh fish" -- "\${cur}"))
+        return 0
+      fi
+      ;;
+    status)
+      COMPREPLY=($(compgen -W "--short" -- "\${cur}"))
+      return 0
+      ;;
     prompt)
       COMPREPLY=($(compgen -W "--shell" -- "\${cur}"))
       return 0
@@ -109,6 +119,9 @@ _ghem_completions() {
           ;;
         prompt)
           _arguments '--shell[Shell type]:shell:(bash zsh fish)'
+          ;;
+        status)
+          _arguments '--short[Output only the profile name]'
           ;;
       esac
       ;;

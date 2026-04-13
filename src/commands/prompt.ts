@@ -1,4 +1,6 @@
 import type { Command } from 'commander';
+import { PersonaError } from '../core/config.js';
+import * as logger from '../utils/logger.js';
 
 function detectShell(): string | null {
   const shell = process.env.SHELL ?? '';
@@ -10,7 +12,7 @@ function detectShell(): string | null {
 
 const AWK_SCRIPT = `
 awk -v cwd="$__ghem_cwd" -v home="$HOME" '
-  /"promptIndicator"/ && /false/ { exit }
+  /"promptIndicator"/ && /false/ { disabled = 1; exit }
   /"activeProfile"/ {
     gsub(/.*"activeProfile"[[:space:]]*:[[:space:]]*"/, "")
     gsub(/".*/, "")
@@ -32,7 +34,7 @@ awk -v cwd="$__ghem_cwd" -v home="$HOME" '
     if (line !~ /\\/$/) line = line "/"
     if (index(cwd, line) == 1) { print current_name; exit }
   }
-  END { if (active != "") print active }
+  END { if (!disabled && active != "") print active }
 ' "$__ghem_config"
 `.trim();
 
@@ -91,7 +93,15 @@ export function registerPromptCommand(program: Command): void {
     .description('Output shell prompt indicator script')
     .option('--shell <shell>', 'Shell type (bash, zsh, fish)')
     .action((opts: { shell?: string }) => {
-      const shell = opts.shell ?? detectShell() ?? 'bash';
-      process.stdout.write(generateScript(shell));
+      try {
+        const shell = opts.shell ?? detectShell() ?? 'bash';
+        process.stdout.write(generateScript(shell));
+      } catch (err) {
+        if (err instanceof PersonaError) {
+          logger.error(err.message);
+          process.exit(1);
+        }
+        throw err;
+      }
     });
 }
