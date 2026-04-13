@@ -5,7 +5,9 @@ import { readConfig, writeConfig, getProfile, updateProfile, PersonaError } from
 import { copyKeyPair } from '../core/ssh.js';
 import { generateSshKey } from '../core/keygen.js';
 import { generateProfileGitconfig, addIncludeIf, removeIncludeIf, backupGitconfig } from '../core/gitconfig.js';
+import { supportsSshCommitSigning } from '../core/git.js';
 import { toTildePath } from '../core/paths.js';
+import type { Profile } from '../types/config.js';
 import { t } from '../i18n/index.js';
 import * as logger from '../utils/logger.js';
 
@@ -77,13 +79,20 @@ export function registerEditCommand(program: Command): void {
           logger.success(t().sshKeyCopied(`~/.git-env-manager/keys/${profileName}/`));
         }
 
-        const currentSigningStatus = (profile.commitSigning ?? false)
-          ? t().statusSigningEnabled
-          : t().statusSigningDisabled;
-        const commitSigning = await confirm({
-          message: t().editCommitSigningPrompt(currentSigningStatus),
-          default: profile.commitSigning ?? false,
-        });
+        const currentSigning = profile.commitSigning ?? false;
+        let commitSigning = currentSigning;
+        if (supportsSshCommitSigning()) {
+          const currentSigningStatus = currentSigning
+            ? t().statusSigningEnabled
+            : t().statusSigningDisabled;
+          commitSigning = await confirm({
+            message: t().editCommitSigningPrompt(currentSigningStatus),
+            default: currentSigning,
+          });
+        } else if (currentSigning) {
+          logger.warn(t().commitSigningUnsupported);
+          commitSigning = false;
+        }
 
         const currentDirs = profile.directories.join(', ');
         const directoriesRaw = await input({
@@ -111,13 +120,13 @@ export function registerEditCommand(program: Command): void {
           return;
         }
 
-        const updatedProfile = {
+        const updatedProfile: Profile = {
           name: profileName,
           gitUserName,
           gitUserEmail,
           sshKeyPath,
           directories,
-          ...(commitSigning && { commitSigning }),
+          commitSigning,
         };
 
         // Update includeIf entries

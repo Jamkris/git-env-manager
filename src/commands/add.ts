@@ -5,7 +5,9 @@ import { readConfig, writeConfig, getProfile, addProfile, PersonaError } from '.
 import { copyKeyPair } from '../core/ssh.js';
 import { generateSshKey } from '../core/keygen.js';
 import { generateProfileGitconfig, addIncludeIf, backupGitconfig } from '../core/gitconfig.js';
+import { supportsSshCommitSigning } from '../core/git.js';
 import { toTildePath } from '../core/paths.js';
+import type { Profile } from '../types/config.js';
 import { t } from '../i18n/index.js';
 import * as logger from '../utils/logger.js';
 
@@ -67,10 +69,15 @@ export function registerAddCommand(program: Command): void {
           });
         }
 
-        const commitSigning = await confirm({
-          message: t().commitSigningPrompt,
-          default: false,
-        });
+        let commitSigning = false;
+        if (supportsSshCommitSigning()) {
+          commitSigning = await confirm({
+            message: t().commitSigningPrompt,
+            default: false,
+          });
+        } else {
+          logger.warn(t().commitSigningUnsupported);
+        }
 
         const directoriesRaw = await input({
           message: t().directoriesPrompt,
@@ -88,13 +95,13 @@ export function registerAddCommand(program: Command): void {
         logger.success(t().sshKeyCopied(`~/.git-env-manager/keys/${profileName}/`));
 
         // Build profile
-        const profile = {
+        const profile: Profile = {
           name: profileName,
           gitUserName,
           gitUserEmail,
           sshKeyPath: keyFileName,
           directories,
-          ...(commitSigning && { commitSigning }),
+          commitSigning,
         };
 
         // Generate profile gitconfig

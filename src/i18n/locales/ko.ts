@@ -46,6 +46,7 @@ export const ko: Messages = {
 
   // List command
   noDirectories: '(없음)',
+  listSigningBadge: ' [서명]',
 
   // Delete command
   deleteConfirm: (name) => `프로필 '${name}'을(를) 삭제하시겠습니까?`,
@@ -78,6 +79,7 @@ export const ko: Messages = {
   // Commit signing
   commitSigningPrompt: 'SSH 커밋 서명을 활성화하시겠습니까? (Git >= 2.34 필요)',
   commitSigningEnabled: 'SSH 커밋 서명이 활성화되었습니다.',
+  commitSigningUnsupported: 'SSH 커밋 서명은 Git >= 2.34가 필요합니다. 건너뜁니다.',
   statusCommitSigning: '커밋 서명:',
   statusSigningEnabled: '활성 (SSH)',
   statusSigningDisabled: '비활성',

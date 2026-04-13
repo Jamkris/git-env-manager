@@ -44,7 +44,7 @@ export function registerListCommand(program: Command): void {
           const dirs = profile.directories.length > 0
             ? profile.directories.join(', ')
             : chalk.dim(t().noDirectories);
-          const signing = profile.commitSigning ? chalk.cyan(' [signing]') : '';
+          const signing = profile.commitSigning ? chalk.cyan(t().listSigningBadge) : '';
 
           console.log(`${marker}${name}${email}${dirs}${signing}`);
         }

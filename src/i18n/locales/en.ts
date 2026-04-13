@@ -46,6 +46,7 @@ export const en: Messages = {
 
   // List command
   noDirectories: '(none)',
+  listSigningBadge: ' [signing]',
 
   // Delete command
   deleteConfirm: (name) => `Are you sure you want to delete profile '${name}'?`,
@@ -78,6 +79,7 @@ export const en: Messages = {
   // Commit signing
   commitSigningPrompt: 'Enable SSH commit signing? (requires Git >= 2.34)',
   commitSigningEnabled: 'SSH commit signing enabled.',
+  commitSigningUnsupported: 'SSH commit signing requires Git >= 2.34. Skipping.',
   statusCommitSigning: 'Signing:',
   statusSigningEnabled: 'enabled (SSH)',
   statusSigningDisabled: 'disabled',

@@ -48,6 +48,7 @@ export interface Messages {
 
   // List command
   noDirectories: string;
+  listSigningBadge: string;
 
   // Delete command
   deleteConfirm: (name: string) => string;
@@ -80,6 +81,7 @@ export interface Messages {
   // Commit signing
   commitSigningPrompt: string;
   commitSigningEnabled: string;
+  commitSigningUnsupported: string;
   statusCommitSigning: string;
   statusSigningEnabled: string;
   statusSigningDisabled: string;

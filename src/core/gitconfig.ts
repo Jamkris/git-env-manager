@@ -15,9 +15,13 @@ function readGitconfig(): string {
 }
 
 function writeGitconfigAtomic(content: string): void {
-  const tmpPath = GITCONFIG_PATH + '.ghem-tmp';
+  writeFileAtomic(GITCONFIG_PATH, content);
+}
+
+function writeFileAtomic(path: string, content: string): void {
+  const tmpPath = `${path}.ghem-tmp`;
   writeFileSync(tmpPath, content, 'utf-8');
-  renameSync(tmpPath, GITCONFIG_PATH);
+  renameSync(tmpPath, path);
 }
 
 export function backupGitconfig(): string | null {
@@ -53,7 +57,7 @@ export function generateProfileGitconfig(profile: Profile): string {
 
   lines.push('');
 
-  writeFileSync(configPath, lines.join('\n'), 'utf-8');
+  writeFileAtomic(configPath, lines.join('\n'));
   return configPath;
 }
 
