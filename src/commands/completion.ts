@@ -1,5 +1,5 @@
 import type { Command } from 'commander';
-import { existsSync, readFileSync, appendFileSync } from 'node:fs';
+import { existsSync, readFileSync, appendFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
 
@@ -34,14 +34,14 @@ _ghem_completions() {
       return 0
       ;;
     config)
-      COMPREPLY=($(compgen -W "set-lang set-prompt" -- "\${cur}"))
+      COMPREPLY=($(compgen -W "set-lang set-prompt set-completion" -- "\${cur}"))
       return 0
       ;;
     set-lang)
       COMPREPLY=($(compgen -W "en ko" -- "\${cur}"))
       return 0
       ;;
-    set-prompt)
+    set-prompt|set-completion)
       COMPREPLY=($(compgen -W "on off" -- "\${cur}"))
       return 0
       ;;
@@ -115,7 +115,7 @@ _ghem_completions() {
           _describe 'profile' profiles
           ;;
         config)
-          _describe 'subcommand' '(set-lang:Set\ display\ language set-prompt:Enable\ or\ disable\ prompt\ indicator)'
+          _describe 'subcommand' '(set-lang:Set\ display\ language set-prompt:Enable\ or\ disable\ prompt\ indicator set-completion:Install\ or\ remove\ shell\ completion)'
           ;;
         prompt)
           _arguments '--shell[Shell type]:shell:(bash zsh fish)'
@@ -165,6 +165,50 @@ export function installCompletion(): InstallResult {
     const line = `\n${COMPLETION_MARKER}\neval "$(ghem completion --shell ${shell})"\n`;
     appendFileSync(rcFile, line, 'utf-8');
     return { status: 'installed', shell, rcFile };
+  } catch {
+    return { status: 'failed', shell, rcFile };
+  }
+}
+
+export type UninstallResult =
+  | { status: 'uninstalled'; shell: string; rcFile: string }
+  | { status: 'not_installed'; shell: string; rcFile: string }
+  | { status: 'failed'; shell: string; rcFile: string }
+  | { status: 'unsupported'; shell: string; rcFile: string };
+
+export function uninstallCompletion(): UninstallResult {
+  const shell = detectShell();
+  if (!shell) {
+    return { status: 'unsupported', shell: process.env.SHELL ?? 'unknown', rcFile: '' };
+  }
+  const rcFile = shell === 'zsh'
+    ? join(homedir(), '.zshrc')
+    : join(homedir(), '.bashrc');
+
+  try {
+    if (!existsSync(rcFile)) {
+      return { status: 'not_installed', shell, rcFile };
+    }
+    const content = readFileSync(rcFile, 'utf-8');
+    if (!content.includes(COMPLETION_MARKER)) {
+      return { status: 'not_installed', shell, rcFile };
+    }
+    const lines = content.split('\n');
+    const filtered: string[] = [];
+    let skipNext = false;
+    for (const line of lines) {
+      if (skipNext) {
+        skipNext = false;
+        continue;
+      }
+      if (line.trim() === COMPLETION_MARKER) {
+        skipNext = true;
+        continue;
+      }
+      filtered.push(line);
+    }
+    writeFileSync(rcFile, filtered.join('\n'), 'utf-8');
+    return { status: 'uninstalled', shell, rcFile };
   } catch {
     return { status: 'failed', shell, rcFile };
   }
