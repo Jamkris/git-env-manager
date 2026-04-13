@@ -107,7 +107,7 @@ export const en: Messages = {
 
   // Update check
   updateAvailable: (current, latest) => `Update available: ${current} → ${latest}`,
-  updateCommand: 'Run `npm install -g git-env-manager` to update.',
+  updateCommand: 'Run `npm update -g git-env-manager` to update.',
 
   // General
   unexpectedError: 'An unexpected error occurred.',
