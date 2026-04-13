@@ -139,6 +139,53 @@ Then choose "Use existing key" during `ghem add` and enter the path.
 
 ---
 
+## Commit Signing (SSH)
+
+git-env-manager can automatically configure SSH-based commit signing for each profile. This uses the same SSH key that's already managed by the tool — no separate GPG key needed.
+
+### Enable During Setup
+
+When running `ghem add`, you'll be prompted:
+
+```text
+? Enable SSH commit signing? (requires Git >= 2.34) (y/N)
+```
+
+### Enable for Existing Profile
+
+```bash
+ghem edit personal
+```
+
+Toggle the commit signing option when prompted.
+
+### What It Configures
+
+When enabled, the per-profile gitconfig includes:
+
+```ini
+[user]
+    signingkey = ~/.git-env-manager/keys/{profile}/{key}.pub
+[commit]
+    gpgsign = true
+[gpg]
+    format = ssh
+```
+
+All commits in directories mapped to that profile will be signed automatically.
+
+### Verify on GitHub
+
+1. Go to **Settings > SSH and GPG keys > New SSH key**
+2. Set **Key type** to **Signing Key**
+3. Paste the same public key used for authentication
+
+GitHub will show a "Verified" badge on signed commits.
+
+> **Note**: SSH commit signing requires Git >= 2.34. The profile's SSH key is reused for signing, so no additional key management is needed.
+
+---
+
 ## Language
 
 git-env-manager supports English (`en`) and Korean (`ko`). Default is English.

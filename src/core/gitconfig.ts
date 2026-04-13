@@ -1,6 +1,7 @@
-import { readFileSync, writeFileSync, existsSync, renameSync, copyFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, renameSync, copyFileSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
+import { randomBytes } from 'node:crypto';
 import { PERSONA_DIR, toTildePath } from './paths.js';
 import { PersonaError } from './config.js';
 import type { Profile } from '../types/config.js';
@@ -15,9 +16,24 @@ function readGitconfig(): string {
 }
 
 function writeGitconfigAtomic(content: string): void {
-  const tmpPath = GITCONFIG_PATH + '.ghem-tmp';
-  writeFileSync(tmpPath, content, 'utf-8');
-  renameSync(tmpPath, GITCONFIG_PATH);
+  writeFileAtomic(GITCONFIG_PATH, content);
+}
+
+function writeFileAtomic(path: string, content: string): void {
+  const tmpPath = `${path}.ghem-tmp.${process.pid}.${randomBytes(6).toString('hex')}`;
+  try {
+    writeFileSync(tmpPath, content, 'utf-8');
+    renameSync(tmpPath, path);
+  } catch (err) {
+    try {
+      if (existsSync(tmpPath)) {
+        unlinkSync(tmpPath);
+      }
+    } catch {
+      // ignore cleanup failures
+    }
+    throw err;
+  }
 }
 
 export function backupGitconfig(): string | null {
@@ -35,16 +51,25 @@ export function generateProfileGitconfig(profile: Profile): string {
   const sshKeyTildePath = `~/.git-env-manager/keys/${profile.name}/${profile.sshKeyPath}`;
   const configPath = join(PERSONA_DIR, `gitconfig-${profile.name}`);
 
-  const content = [
+  const lines = [
     '[user]',
     `\tname = ${profile.gitUserName}`,
     `\temail = ${profile.gitUserEmail}`,
-    '[core]',
-    `\tsshCommand = "ssh -i ${sshKeyTildePath} -o IdentitiesOnly=yes"`,
-    '',
-  ].join('\n');
+  ];
 
-  writeFileSync(configPath, content, 'utf-8');
+  if (profile.commitSigning) {
+    lines.push(`\tsigningkey = ${sshKeyTildePath}.pub`);
+  }
+
+  lines.push('[core]', `\tsshCommand = "ssh -i ${sshKeyTildePath} -o IdentitiesOnly=yes"`);
+
+  if (profile.commitSigning) {
+    lines.push('[commit]', '\tgpgsign = true', '[gpg]', '\tformat = ssh');
+  }
+
+  lines.push('');
+
+  writeFileAtomic(configPath, lines.join('\n'));
   return configPath;
 }
 
