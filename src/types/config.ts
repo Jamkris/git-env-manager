@@ -6,6 +6,7 @@ export interface Profile {
   gitUserEmail: string;
   sshKeyPath: string;
   directories: string[];
+  commitSigning?: boolean;
 }
 
 export interface PersonaConfig {

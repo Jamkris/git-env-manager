@@ -35,16 +35,25 @@ export function generateProfileGitconfig(profile: Profile): string {
   const sshKeyTildePath = `~/.git-env-manager/keys/${profile.name}/${profile.sshKeyPath}`;
   const configPath = join(PERSONA_DIR, `gitconfig-${profile.name}`);
 
-  const content = [
+  const lines = [
     '[user]',
     `\tname = ${profile.gitUserName}`,
     `\temail = ${profile.gitUserEmail}`,
-    '[core]',
-    `\tsshCommand = "ssh -i ${sshKeyTildePath} -o IdentitiesOnly=yes"`,
-    '',
-  ].join('\n');
+  ];
 
-  writeFileSync(configPath, content, 'utf-8');
+  if (profile.commitSigning) {
+    lines.push(`\tsigningkey = ${sshKeyTildePath}.pub`);
+  }
+
+  lines.push('[core]', `\tsshCommand = "ssh -i ${sshKeyTildePath} -o IdentitiesOnly=yes"`);
+
+  if (profile.commitSigning) {
+    lines.push('[commit]', '\tgpgsign = true', '[gpg]', '\tformat = ssh');
+  }
+
+  lines.push('');
+
+  writeFileSync(configPath, lines.join('\n'), 'utf-8');
   return configPath;
 }
 

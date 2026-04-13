@@ -1,6 +1,6 @@
 import type { Command } from 'commander';
 import { readFileSync } from 'node:fs';
-import { input, select } from '@inquirer/prompts';
+import { input, select, confirm } from '@inquirer/prompts';
 import { readConfig, writeConfig, getProfile, updateProfile, PersonaError } from '../core/config.js';
 import { copyKeyPair } from '../core/ssh.js';
 import { generateSshKey } from '../core/keygen.js';
@@ -77,6 +77,14 @@ export function registerEditCommand(program: Command): void {
           logger.success(t().sshKeyCopied(`~/.git-env-manager/keys/${profileName}/`));
         }
 
+        const currentSigningStatus = (profile.commitSigning ?? false)
+          ? t().statusSigningEnabled
+          : t().statusSigningDisabled;
+        const commitSigning = await confirm({
+          message: t().editCommitSigningPrompt(currentSigningStatus),
+          default: profile.commitSigning ?? false,
+        });
+
         const currentDirs = profile.directories.join(', ');
         const directoriesRaw = await input({
           message: currentDirs
@@ -95,6 +103,7 @@ export function registerEditCommand(program: Command): void {
           gitUserName === profile.gitUserName &&
           gitUserEmail === profile.gitUserEmail &&
           sshKeyPath === profile.sshKeyPath &&
+          commitSigning === (profile.commitSigning ?? false) &&
           directories.join(',') === profile.directories.join(',');
 
         if (unchanged) {
@@ -108,6 +117,7 @@ export function registerEditCommand(program: Command): void {
           gitUserEmail,
           sshKeyPath,
           directories,
+          ...(commitSigning && { commitSigning }),
         };
 
         // Update includeIf entries

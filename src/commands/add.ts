@@ -1,6 +1,6 @@
 import type { Command } from 'commander';
 import { readFileSync } from 'node:fs';
-import { input, select } from '@inquirer/prompts';
+import { input, select, confirm } from '@inquirer/prompts';
 import { readConfig, writeConfig, getProfile, addProfile, PersonaError } from '../core/config.js';
 import { copyKeyPair } from '../core/ssh.js';
 import { generateSshKey } from '../core/keygen.js';
@@ -67,6 +67,11 @@ export function registerAddCommand(program: Command): void {
           });
         }
 
+        const commitSigning = await confirm({
+          message: t().commitSigningPrompt,
+          default: false,
+        });
+
         const directoriesRaw = await input({
           message: t().directoriesPrompt,
           default: '',
@@ -89,10 +94,15 @@ export function registerAddCommand(program: Command): void {
           gitUserEmail,
           sshKeyPath: keyFileName,
           directories,
+          ...(commitSigning && { commitSigning }),
         };
 
         // Generate profile gitconfig
         generateProfileGitconfig(profile);
+
+        if (commitSigning) {
+          logger.success(t().commitSigningEnabled);
+        }
 
         // Add includeIf entries
         if (directories.length > 0) {

@@ -77,11 +77,19 @@ export interface Messages {
   statusNoProfileMatch: string;
   statusNoActiveProfile: string;
 
+  // Commit signing
+  commitSigningPrompt: string;
+  commitSigningEnabled: string;
+  statusCommitSigning: string;
+  statusSigningEnabled: string;
+  statusSigningDisabled: string;
+
   // Edit command
   editNotChanged: string;
   editSuccess: (name: string) => string;
   editCurrentValue: (field: string, value: string) => string;
   editDirectoriesCurrent: (dirs: string) => string;
+  editCommitSigningPrompt: (current: string) => string;
   editSshKeyAction: string;
   editSshKeyKeep: string;
   editSshKeyGenerate: string;

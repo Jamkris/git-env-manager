@@ -75,11 +75,19 @@ export const en: Messages = {
   statusNoProfileMatch: 'No profile matches the current directory.',
   statusNoActiveProfile: 'No active profile set.',
 
+  // Commit signing
+  commitSigningPrompt: 'Enable SSH commit signing? (requires Git >= 2.34)',
+  commitSigningEnabled: 'SSH commit signing enabled.',
+  statusCommitSigning: 'Signing:',
+  statusSigningEnabled: 'enabled (SSH)',
+  statusSigningDisabled: 'disabled',
+
   // Edit command
   editNotChanged: 'No changes made.',
   editSuccess: (name) => `Profile '${name}' has been updated.`,
   editCurrentValue: (field, value) => `${field} (current: ${value}):`,
   editDirectoriesCurrent: (dirs) => `Auto-switch directories (current: ${dirs}):`,
+  editCommitSigningPrompt: (current) => `Enable SSH commit signing? (current: ${current})`,
   editSshKeyAction: 'SSH key action:',
   editSshKeyKeep: 'Keep current key',
   editSshKeyGenerate: 'Generate new SSH key',

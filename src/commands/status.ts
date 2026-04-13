@@ -30,6 +30,7 @@ export function registerStatusCommand(program: Command): void {
           console.log(`  ${t().statusName} ${matched.gitUserName}`);
           console.log(`  ${t().statusEmail} ${matched.gitUserEmail}`);
           console.log(`  ${t().statusSshKey} ~/.git-env-manager/keys/${matched.name}/${matched.sshKeyPath}`);
+          console.log(`  ${t().statusCommitSigning} ${matched.commitSigning ? t().statusSigningEnabled : t().statusSigningDisabled}`);
         } else if (config.activeProfile) {
           const active = getProfile(config, config.activeProfile);
           if (active) {
@@ -37,6 +38,7 @@ export function registerStatusCommand(program: Command): void {
             console.log(`  ${t().statusName} ${active.gitUserName}`);
             console.log(`  ${t().statusEmail} ${active.gitUserEmail}`);
             console.log(`  ${t().statusSshKey} ~/.git-env-manager/keys/${active.name}/${active.sshKeyPath}`);
+            console.log(`  ${t().statusCommitSigning} ${active.commitSigning ? t().statusSigningEnabled : t().statusSigningDisabled}`);
           }
         } else {
           logger.info(t().statusNoActiveProfile);

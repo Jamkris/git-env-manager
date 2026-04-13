@@ -75,11 +75,19 @@ export const ko: Messages = {
   statusNoProfileMatch: '현재 디렉토리와 일치하는 프로필이 없습니다.',
   statusNoActiveProfile: '활성 프로필이 설정되지 않았습니다.',
 
+  // Commit signing
+  commitSigningPrompt: 'SSH 커밋 서명을 활성화하시겠습니까? (Git >= 2.34 필요)',
+  commitSigningEnabled: 'SSH 커밋 서명이 활성화되었습니다.',
+  statusCommitSigning: '커밋 서명:',
+  statusSigningEnabled: '활성 (SSH)',
+  statusSigningDisabled: '비활성',
+
   // Edit command
   editNotChanged: '변경 사항이 없습니다.',
   editSuccess: (name) => `프로필 '${name}'이(가) 수정되었습니다.`,
   editCurrentValue: (field, value) => `${field} (현재: ${value}):`,
   editDirectoriesCurrent: (dirs) => `자동 전환 디렉토리 (현재: ${dirs}):`,
+  editCommitSigningPrompt: (current) => `SSH 커밋 서명 활성화 (현재: ${current})`,
   editSshKeyAction: 'SSH 키 작업:',
   editSshKeyKeep: '현재 키 유지',
   editSshKeyGenerate: '새 SSH 키 생성',

@@ -139,6 +139,53 @@ ssh-keygen -C "your-email@example.com" -f ~/.ssh/id_ghem_personal
 
 ---
 
+## 커밋 서명 (SSH)
+
+git-env-manager는 프로필별로 SSH 기반 커밋 서명을 자동 구성할 수 있습니다. 이미 관리 중인 SSH 키를 그대로 사용하므로 별도의 GPG 키가 필요 없습니다.
+
+### 프로필 생성 시 활성화
+
+`ghem add` 실행 시 다음 프롬프트가 표시됩니다:
+
+```text
+? SSH 커밋 서명을 활성화하시겠습니까? (Git >= 2.34 필요) (y/N)
+```
+
+### 기존 프로필에 활성화
+
+```bash
+ghem edit personal
+```
+
+프롬프트에서 커밋 서명 옵션을 전환합니다.
+
+### 설정 내용
+
+활성화 시 프로필별 gitconfig에 다음이 포함됩니다:
+
+```ini
+[user]
+    signingkey = ~/.git-env-manager/keys/{profile}/{key}.pub
+[commit]
+    gpgsign = true
+[gpg]
+    format = ssh
+```
+
+해당 프로필에 매핑된 디렉토리의 모든 커밋이 자동으로 서명됩니다.
+
+### GitHub에서 확인
+
+1. **Settings > SSH and GPG keys > New SSH key**로 이동
+2. **Key type**을 **Signing Key**로 설정
+3. 인증에 사용하는 동일한 공개키를 붙여넣기
+
+GitHub에서 서명된 커밋에 "Verified" 배지가 표시됩니다.
+
+> **참고**: SSH 커밋 서명은 Git >= 2.34가 필요합니다. 프로필의 SSH 키를 서명에도 재사용하므로 추가적인 키 관리가 필요 없습니다.
+
+---
+
 ## 언어 설정
 
 영어(`en`)와 한국어(`ko`)를 지원합니다. 기본값은 영어입니다.
